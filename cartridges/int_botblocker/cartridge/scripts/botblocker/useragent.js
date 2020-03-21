@@ -89,7 +89,7 @@ UserAgent.prototype.determineBotData = function () {
  * @returns {boolean} - Safe or not
  */
 UserAgent.prototype.isSafe = function () {
-    return this.isKnownBot;
+    return this.isKnownBot || !empty(this.os.name);
 };
 
 module.exports = UserAgent;
