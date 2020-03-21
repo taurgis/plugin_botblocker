@@ -11,8 +11,16 @@ function IpAddress(ip, count) {
     this.count = count;
 }
 
-IpAddress.prototype.isBelowThreshold = function () {
-    return this.count < 1000;
+IpAddress.prototype.isBelowFirstThreshold = function () {
+    return this.count < 1200;
+};
+
+IpAddress.prototype.isBelowSecondThreshold = function () {
+    return this.count < 2400;
+};
+
+IpAddress.prototype.isBelowThirdThreshold = function () {
+    return this.count < 4600;
 };
 
 

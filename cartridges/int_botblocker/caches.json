@@ -7,6 +7,14 @@
         {
             "id": "bbBlockedIP",
             "expireAfterSeconds": 3600
+        },
+        {
+            "id": "bbRegex",
+            "expireAfterSeconds": 86400
+        },
+        {
+            "id": "bbUserAgent",
+            "expireAfterSeconds": 86400
         }
     ]
 }

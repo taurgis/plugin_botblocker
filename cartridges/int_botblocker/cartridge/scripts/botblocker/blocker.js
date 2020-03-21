@@ -1,6 +1,8 @@
 'use strict';
 
+var CacheMgr = require('dw/system/CacheMgr');
 var bbRequest = require('~/cartridge/scripts/model/request');
+var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
 
 /**
  * Fetches the IP from the current request.
@@ -29,8 +31,6 @@ function determineIP(requestMap) {
  * @returns {boolean} If the request is OK
  */
 function validate() {
-    var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
-
     var IPAddress = require('../model/ipAddress');
     var errorResponsePipelineMatches = request.getHttpPath().search('Blocker-Challenge');
 
@@ -41,11 +41,10 @@ function validate() {
     try {
         var requestParamsMap = bbRequest.getRequestParameters(request);
         var sIPAddress = determineIP(requestParamsMap);
+        var sUserAgent = requestParamsMap.get('UserAgent');
 
         if (sIPAddress != null) {
-            var CacheMgr = require('dw/system/CacheMgr');
             var ipRequestCache = CacheMgr.getCache('bbIPRequest');
-
             var oIPAddress = ipRequestCache.get(sIPAddress);
 
             if (!oIPAddress) {
@@ -56,11 +55,29 @@ function validate() {
 
             ipRequestCache.put(sIPAddress, oIPAddress);
 
-            bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count, 'debug', 'Blocker~validate');
+            bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count + ' and user agent ' + sUserAgent, 'debug', 'Blocker~validate');
 
-            if (!oIPAddress.isBelowThreshold()) {
+            if (!oIPAddress.isBelowThirdThreshold()) {
+                bbLogger.log(sIPAddress + ' reached third threshold.', 'error', 'Blocker~validate');
                 return false;
             }
+
+            if (!oIPAddress.isBelowSecondThreshold()) {
+                bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
+                return false;
+            }
+
+            if (!oIPAddress.isBelowFirstThreshold()) {
+                bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
+
+                // Check if it is a known bot
+                var isBot = false;
+
+
+                return isBot;
+            }
+        } else {
+            return false;
         }
     } catch (e) {
         bbLogger.log('An error occured while trying to validate request with the Bot Blocker plugin ' + e, 'error', 'Blocker~validate');

@@ -1,11 +1,12 @@
 'use strict';
 
 var server = require('server');
+var cache = require('*/cartridge/scripts/middleware/cache');
 
 /**
  * It blocks request and show error page
  */
-server.get('Challenge', function (req, res, next) {
+server.get('Challenge', cache.applyDefaultCache, function (req, res, next) {
     res.render('error/ddresponse');
 
     next();

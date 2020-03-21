@@ -14,6 +14,8 @@ var URLUtils = require('dw/web/URLUtils');
  */
 function validate() {
     if (!request.includeRequest && request.httpRequest) {
+        var startTime = new Date().getTime();
+        var bbLogger = require('../util/BBLogger');
         var botBlocker = require('../botblocker/blocker');
 
         try {
@@ -24,9 +26,10 @@ function validate() {
                 response.redirect(redirectUrl);
             }
         } catch (e) {
-            var bbLogger = require('../util/BBLogger');
             bbLogger.log('An error occured while trying to check request' + e, 'error', 'BotBlockerRequestFilter~validate');
         }
+
+        bbLogger.log('Time to process request in MS: ' + (new Date().getTime() - startTime), 'debug', 'BotBlockerRequestFilter~validate');
     }
 
     return new Status(Status.OK);
