@@ -1,0 +1,12 @@
+{
+    "caches": [
+        {
+            "id": "bbIPRequest",
+            "expireAfterSeconds": 120
+        },
+        {
+            "id": "bbBlockedIP",
+            "expireAfterSeconds": 3600
+        }
+    ]
+}
