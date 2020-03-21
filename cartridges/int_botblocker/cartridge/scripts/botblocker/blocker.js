@@ -3,6 +3,7 @@
 var CacheMgr = require('dw/system/CacheMgr');
 var bbRequest = require('~/cartridge/scripts/model/request');
 var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
+var UserAgent = require('./useragent');
 
 /**
  * Fetches the IP from the current request.
@@ -42,6 +43,8 @@ function validate() {
         var requestParamsMap = bbRequest.getRequestParameters(request);
         var sIPAddress = determineIP(requestParamsMap);
         var sUserAgent = requestParamsMap.get('UserAgent');
+        var uUserAgent = new UserAgent(sUserAgent);
+        uUserAgent.parse();
 
         if (sIPAddress != null) {
             var ipRequestCache = CacheMgr.getCache('bbIPRequest');
@@ -55,7 +58,7 @@ function validate() {
 
             ipRequestCache.put(sIPAddress, oIPAddress);
 
-            bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count + ' and user agent ' + sUserAgent, 'debug', 'Blocker~validate');
+            bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count + ' and user agent ' + JSON.stringify(uUserAgent, null, 4), 'debug', 'Blocker~validate');
 
             if (!oIPAddress.isBelowThirdThreshold()) {
                 bbLogger.log(sIPAddress + ' reached third threshold.', 'error', 'Blocker~validate');
@@ -70,11 +73,10 @@ function validate() {
             if (!oIPAddress.isBelowFirstThreshold()) {
                 bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
 
-                // Check if it is a known bot
-                var isBot = false;
 
+                var result = true;
 
-                return isBot;
+                return result.isBot;
             }
         } else {
             return false;
