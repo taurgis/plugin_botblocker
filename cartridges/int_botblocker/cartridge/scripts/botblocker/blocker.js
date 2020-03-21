@@ -42,8 +42,12 @@ function validate() {
     try {
         var requestParamsMap = bbRequest.getRequestParameters(request);
         var sIPAddress = determineIP(requestParamsMap);
-        var sUserAgent = requestParamsMap.get('UserAgent');
-        var uUserAgent = new UserAgent(sUserAgent);
+        var uUserAgent = new UserAgent(requestParamsMap.get('UserAgent'));
+
+        if (empty(uUserAgent.source)) {
+            return false;
+        }
+
         uUserAgent.parse();
 
         if (sIPAddress != null) {
@@ -67,16 +71,14 @@ function validate() {
 
             if (!oIPAddress.isBelowSecondThreshold()) {
                 bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
-                return false;
+
+                return uUserAgent.isSafe();
             }
 
             if (!oIPAddress.isBelowFirstThreshold()) {
                 bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
 
-
-                var result = true;
-
-                return result.isBot;
+                return uUserAgent.isSafe();
             }
         } else {
             return false;

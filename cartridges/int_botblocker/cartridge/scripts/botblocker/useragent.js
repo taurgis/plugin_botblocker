@@ -1,6 +1,7 @@
 'use strict';
 
 var CacheMgr = require('dw/system/CacheMgr');
+var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
 var cUACache = CacheMgr.getCache('bbUserAgent');
 var cRegexCache = CacheMgr.getCache('bbRegex');
 
@@ -52,18 +53,32 @@ function userAgentParser(rawRegex, userAgent) {
  */
 function UserAgent(sUserAgent) {
     this.source = sUserAgent;
+    this.parsed = false;
     this.result = null;
 }
 
 UserAgent.prototype.parse = function () {
-    var cachedParseResult = cUACache.get(this.source);
+    if (this.source) {
+        var cachedParseResult = cUACache.get(this.source);
 
-    if (!cachedParseResult) {
-        this.checkIfBot();
+        if (cachedParseResult) {
+            bbLogger.log('Fetching UserAgent from cache.', 'debug', 'UserAgent~parse');
+            this.bot = cachedParseResult.bot;
+            this.isKnownBot = cachedParseResult.isKnownBot;
+        } else {
+            this.determineBotData();
+
+            cUACache.put(this.source, this);
+            bbLogger.log('UserAgent calculated and cached.', 'debug', 'UserAgent~parse');
+        }
+    } else {
+        this.isKnownBot = false;
     }
+
+    this.parsed = true;
 };
 
-UserAgent.prototype.checkIfBot = function () {
+UserAgent.prototype.determineBotData = function () {
     var bots = require('./regex/bots.json');
 
     bots.some(function (bot) {
@@ -85,7 +100,11 @@ UserAgent.prototype.checkIfBot = function () {
         return true;
     });
 
-    this.isBot = !!this.bot;
+    this.isKnownBot = !!this.bot;
+};
+
+UserAgent.prototype.isSafe = function () {
+    return this.isKnownBot;
 };
 
 module.exports = UserAgent;
