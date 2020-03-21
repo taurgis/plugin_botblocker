@@ -34,7 +34,6 @@ function getRegexInstance(rawRegex) {
  * @returns {Object} - The match
  */
 function userAgentParser(rawRegex, userAgent) {
-    // TODO: find out why it fails in some browsers
     try {
         const regexInstance = getRegexInstance(rawRegex);
         const match = regexInstance.exec(userAgent);
@@ -57,6 +56,13 @@ function UserAgent(sUserAgent) {
     this.result = null;
 }
 
+/**
+ * This function parses the User Agent string and detects what type of browser
+ * is sending requests to the server (e.g. a bot, TV, computer, tablet, mobile, ...)
+ *
+ * Once a useragent has been processed, it will be cached to speed up subsequent requests
+ * using the same type of browser.
+ */
 UserAgent.prototype.parse = function () {
     if (this.source) {
         var cachedParseResult = cUACache.get(this.source);
@@ -78,6 +84,11 @@ UserAgent.prototype.parse = function () {
     this.parsed = true;
 };
 
+/**
+ * Checks wether or not the User Agent is a known bot like Google Mobile bot,
+ * Bing, ... If these are sending request, they usually abide by the rules and
+ * will not trigger a request limit.
+ */
 UserAgent.prototype.determineBotData = function () {
     var bots = require('./regex/bots.json');
 
@@ -103,6 +114,12 @@ UserAgent.prototype.determineBotData = function () {
     this.isKnownBot = !!this.bot;
 };
 
+/**
+ * Returns wether or not the User Agent string is safe or not.
+ * If we cannot detect what it is, it usally means its malicous.
+ *
+ * @returns {boolean} - Safe or not
+ */
 UserAgent.prototype.isSafe = function () {
     return this.isKnownBot;
 };
