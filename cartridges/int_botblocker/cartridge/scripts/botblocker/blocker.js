@@ -32,6 +32,7 @@ function determineIP(requestMap) {
  * @returns {boolean} If the request is OK
  */
 function validate() {
+    var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
     var IPAddress = require('../model/ipAddress');
     var errorResponsePipelineMatches = request.getHttpPath().search('Blocker-Challenge');
 
@@ -48,11 +49,15 @@ function validate() {
             return false;
         }
 
-        uUserAgent.parse();
-
         if (sIPAddress != null) {
+            if (cBlackListCache.get(sIPAddress)) {
+                return false;
+            }
+
             var ipRequestCache = CacheMgr.getCache('bbIPRequest');
             var oIPAddress = ipRequestCache.get(sIPAddress);
+
+            uUserAgent.parse();
 
             if (!oIPAddress) {
                 oIPAddress = new IPAddress(sIPAddress, 1);
@@ -66,19 +71,28 @@ function validate() {
 
             if (!oIPAddress.isBelowThirdThreshold()) {
                 bbLogger.log(sIPAddress + ' reached third threshold.', 'error', 'Blocker~validate');
+                cBlackListCache.put(sIPAddress, true);
+
                 return false;
             }
 
             if (!oIPAddress.isBelowSecondThreshold()) {
                 bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
 
-                return uUserAgent.isSafe();
+                if (!uUserAgent.isSafe()) {
+                    cBlackListCache.put(sIPAddress, true);
+                    return false;
+                }
             }
 
             if (!oIPAddress.isBelowFirstThreshold()) {
                 bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
 
-                return uUserAgent.isSafe();
+                if (!uUserAgent.isSafe()) {
+                    cBlackListCache.put(sIPAddress, true);
+
+                    return false;
+                }
             }
         } else {
             return false;

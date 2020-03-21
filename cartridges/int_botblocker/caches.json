@@ -5,7 +5,7 @@
             "expireAfterSeconds": 120
         },
         {
-            "id": "bbBlockedIP",
+            "id": "bbBlacklisted",
             "expireAfterSeconds": 3600
         },
         {
