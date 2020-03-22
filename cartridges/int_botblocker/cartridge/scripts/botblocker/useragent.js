@@ -18,6 +18,7 @@ function UserAgent(sUserAgent) {
     this.bot = null;
     this.os = null;
     this.browser = null;
+    this.isKnownBrowser = null;
 }
 
 /**
@@ -37,10 +38,26 @@ UserAgent.prototype.parse = function () {
             this.isKnownBot = cachedParseResult.isKnownBot;
             this.os = cachedParseResult.os;
             this.browser = cachedParseResult.browser;
+            this.isKnownBrowser = cachedParseResult.isKnownBrowser;
+            this.library = cachedParseResult.library;
+            this.isKnownLibrary = cachedParseResult.isKnownLibrary;
         } else {
             this.determineBotData();
-            this.determineOS();
-            this.determineBrowser();
+
+            if (!this.isKnownBot) {
+                delete this.bot;
+
+                this.determineBrowser();
+
+                if (!this.isKnownBrowser) {
+                    delete this.browser;
+                    this.determineLibraryData();
+                }
+
+                if (this.isKnownBrowser || this.isKnownLibrary) {
+                    this.determineOS();
+                }
+            }
 
             cUACache.put(this.source, this);
             bbLogger.log('UserAgent calculated and cached.', 'debug', 'UserAgent~parse');
@@ -56,6 +73,7 @@ UserAgent.prototype.determineOS = function () {
 UserAgent.prototype.determineBrowser = function () {
     var oBrowser = new Browser(this.source);
     this.browser = oBrowser.parse();
+    this.isKnownBrowser = !!this.browser.name;
 };
 
 /**
@@ -89,13 +107,51 @@ UserAgent.prototype.determineBotData = function () {
 };
 
 /**
+ * Checks wether or not the User Agent is a known library like wget,
+ * Guzzle, ... If these are sending request and passing the limit, it
+ * is someone doing something they shouldn't be doing.
+ */
+UserAgent.prototype.determineLibraryData = function () {
+    var libraries = require('./regex/libraries.json');
+    var variableReplacement = require('../util/variableReplacement');
+    var formatVersion = require('../util/version').formatVersion;
+    var sUserAgent = this.source;
+
+    var result = {
+        type: '',
+        name: '',
+        version: '',
+        url: ''
+    };
+
+    libraries.some(function (library) {
+        const match = userAgentParser(library.regex, sUserAgent);
+
+        if (!match) return false;
+
+        result.type = 'library';
+        result.name = variableReplacement(library.name, match);
+        result.version = formatVersion(variableReplacement(library.version, match));
+        result.url = library.url || '';
+
+        return true;
+    });
+
+    if (!empty(result.name)) {
+        this.library = result;
+    }
+
+    this.isKnownLibrary = !!this.library;
+};
+
+/**
  * Returns wether or not the User Agent string is safe or not.
  * If we cannot detect what it is, it usally means its malicous.
  *
  * @returns {boolean} - Safe or not
  */
 UserAgent.prototype.isSafe = function () {
-    return this.isKnownBot || !empty(this.os.name) || !empty(this.browser.name);
+    return !this.isKnownLibrary && (this.isKnownBot || !empty(this.os.name) || this.isKnownBrowser);
 };
 
 module.exports = UserAgent;
