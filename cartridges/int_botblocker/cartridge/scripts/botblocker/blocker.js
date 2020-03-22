@@ -56,8 +56,6 @@ function validate() {
         var ipRequestCache = CacheMgr.getCache('bbIPRequest');
         var oIPAddress = ipRequestCache.get(sIPAddress);
 
-        uUserAgent.parse();
-
         if (!oIPAddress) {
             oIPAddress = new IPAddress(sIPAddress, 1);
         } else {
@@ -86,7 +84,7 @@ function validate() {
 
         if (!oIPAddress.isBelowFirstThreshold()) {
             bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
-
+            uUserAgent.parse();
             if (!uUserAgent.isSafe()) {
                 cBlackListCache.put(sIPAddress, true);
 

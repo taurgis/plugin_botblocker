@@ -15,10 +15,8 @@ var Browser = require('./browser');
 function UserAgent(sUserAgent) {
     this.source = sUserAgent;
     this.isKnownBot = false;
-    this.bot = null;
-    this.os = null;
-    this.browser = null;
-    this.isKnownBrowser = null;
+    this.isKnownBrowser = false;
+    this.isKnownLibrary = false;
 }
 
 /**
