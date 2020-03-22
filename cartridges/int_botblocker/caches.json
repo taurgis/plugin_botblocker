@@ -2,7 +2,7 @@
     "caches": [
         {
             "id": "bbIPRequest",
-            "expireAfterSeconds": 120
+            "expireAfterSeconds": 60
         },
         {
             "id": "bbBlacklisted",

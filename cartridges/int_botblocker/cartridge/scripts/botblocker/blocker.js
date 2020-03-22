@@ -38,7 +38,7 @@ function validate() {
         if (!oIPAddress) {
             oIPAddress = new IPAddress(sIPAddress, 1);
         } else {
-            oIPAddress = new IPAddress(sIPAddress, oIPAddress.count + 1);
+            oIPAddress = new IPAddress(sIPAddress, oIPAddress.count + 1, oIPAddress.age);
         }
 
         ipRequestCache.put(sIPAddress, oIPAddress);
