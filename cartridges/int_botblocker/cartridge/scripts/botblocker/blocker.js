@@ -1,30 +1,9 @@
 'use strict';
 
 var CacheMgr = require('dw/system/CacheMgr');
-var bbRequest = require('~/cartridge/scripts/model/request');
+var BBRequest = require('~/cartridge/scripts/model/request');
 var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
 var UserAgent = require('./useragent');
-
-/**
- * Fetches the IP from the current request.
- * @param {dw.util.HashMap} requestMap - The request map containing all values from the request
- *
- * @returns {string} - The IP address of the client making the request
- */
-function determineIP(requestMap) {
-    if (requestMap.containsKey('TrueClientIP')) {
-        return requestMap.get('TrueClientIP');
-    }
-
-    if (requestMap.containsKey('X-Real-IP')) {
-        return requestMap.get('X-Real-IP');
-    }
-    if (requestMap.containsKey('IP')) {
-        return requestMap.get('IP');
-    }
-
-    return null;
-}
 
 /**
  * This method will act as an entry point for any request which needs to be validated.
@@ -40,9 +19,9 @@ function validate() {
         return true;
     }
 
-    var requestParamsMap = bbRequest.getRequestParameters(request);
-    var sIPAddress = determineIP(requestParamsMap);
-    var uUserAgent = new UserAgent(requestParamsMap.get('UserAgent'));
+    var oBBRequest = new BBRequest(request);
+    var sIPAddress = oBBRequest.TrueClientIP || oBBRequest['X-Real-IP'] || oBBRequest.IP;
+    var uUserAgent = new UserAgent(oBBRequest.UserAgent);
 
     if (empty(uUserAgent.source)) {
         return false;
