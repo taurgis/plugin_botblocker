@@ -5,6 +5,7 @@ var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
 var cUACache = CacheMgr.getCache('bbUserAgent');
 var userAgentParser = require('../util/regexParser').userAgentParser;
 var OperatingSystem = require('./os');
+var Browser = require('./browser');
 
 /**
  * The User Agent processing class
@@ -13,10 +14,10 @@ var OperatingSystem = require('./os');
  */
 function UserAgent(sUserAgent) {
     this.source = sUserAgent;
-    this.parsed = false;
     this.isKnownBot = false;
     this.bot = null;
     this.os = null;
+    this.browser = null;
 }
 
 /**
@@ -35,21 +36,26 @@ UserAgent.prototype.parse = function () {
             this.bot = cachedParseResult.bot;
             this.isKnownBot = cachedParseResult.isKnownBot;
             this.os = cachedParseResult.os;
+            this.browser = cachedParseResult.browser;
         } else {
             this.determineBotData();
             this.determineOS();
+            this.determineBrowser();
 
             cUACache.put(this.source, this);
             bbLogger.log('UserAgent calculated and cached.', 'debug', 'UserAgent~parse');
         }
     }
-
-    this.parsed = true;
 };
 
 UserAgent.prototype.determineOS = function () {
     var oOperatingSystem = new OperatingSystem(this.source);
     this.os = oOperatingSystem.parse();
+};
+
+UserAgent.prototype.determineBrowser = function () {
+    var oBrowser = new Browser(this.source);
+    this.browser = oBrowser.parse();
 };
 
 /**
@@ -61,7 +67,7 @@ UserAgent.prototype.determineBotData = function () {
     var bots = require('./regex/bots.json');
 
     bots.some(function (bot) {
-        const match = userAgentParser(bot.regex, this.source);
+        var match = userAgentParser(bot.regex, this.source);
 
         if (!match) { return false; }
 
@@ -89,7 +95,7 @@ UserAgent.prototype.determineBotData = function () {
  * @returns {boolean} - Safe or not
  */
 UserAgent.prototype.isSafe = function () {
-    return this.isKnownBot || !empty(this.os.name);
+    return this.isKnownBot || !empty(this.os.name) || !empty(this.browser.name);
 };
 
 module.exports = UserAgent;

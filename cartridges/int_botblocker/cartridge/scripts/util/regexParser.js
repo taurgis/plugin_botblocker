@@ -4,11 +4,11 @@ var getRegexInstance = function (rawRegex) {
     var CacheMgr = require('dw/system/CacheMgr');
     var cache = CacheMgr.getCache('bbRegex');
 
-    const cachedRegexInstance = cache.get(rawRegex);
+    var cachedRegexInstance = cache.get(rawRegex);
 
     if (cachedRegexInstance) return cachedRegexInstance.value;
 
-    const regexInstance = RegExp('(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:' + rawRegex + ')', 'i');
+    var regexInstance = RegExp('(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:' + rawRegex + ')', 'i');
 
     cache.put(rawRegex, {
         value: regexInstance
@@ -20,8 +20,8 @@ var getRegexInstance = function (rawRegex) {
 var userAgentParser = function (rawRegex, userAgent) {
     // TODO: find out why it fails in some browsers
     try {
-        const regexInstance = getRegexInstance(rawRegex);
-        const match = regexInstance.exec(userAgent);
+        var regexInstance = getRegexInstance(rawRegex);
+        var match = regexInstance.exec(userAgent);
 
         return match ? match.slice(1) : null;
     } catch (e) {

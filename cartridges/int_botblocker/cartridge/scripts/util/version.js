@@ -6,8 +6,8 @@ module.exports = {
     formatVersion: function (version, versionTruncation) {
         if (version === undefined) return '';
 
-        const versionString = trim(version, '. ').replace(new RegExp('_', 'g'), '.');
-        const versionParts = versionString.split('.');
+        var versionString = trim(version, '. ').replace(new RegExp('_', 'g'), '.');
+        var versionParts = versionString.split('.');
 
         // Return if the string is not only digits once we removed the dots
         if (!/^\d+$/.test(versionParts.join(''))) {
@@ -16,7 +16,7 @@ module.exports = {
 
         if (versionTruncation !== 0) {
             if (parseFloat(versionString) % 1 === 0) {
-                return parseInt(versionString, 10).toFixed(1);
+                return parseInt(versionString, 10);
             }
         }
 
@@ -32,8 +32,8 @@ module.exports = {
     parseBrowserEngineVersion: function (userAgent, engine) {
         if (!engine) return '';
 
-        const regex = new RegExp(engine + '\\s*\\/?\\s*((?:(?=\\d+\\.\\d)\\d+[.\\d]*|\\d{1,7}(?=(?:\\D|$))))', 'i');
-        const match = userAgent.match(regex);
+        var regex = new RegExp(engine + '\\s*\\/?\\s*((?:(?=\\d+\\.\\d)\\d+[.\\d]*|\\d{1,7}(?=(?:\\D|$))))', 'i');
+        var match = userAgent.match(regex);
 
         if (!match) return '';
 

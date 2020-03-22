@@ -24,12 +24,16 @@ OS.prototype.getOsFamily = function (osName) {
     var osShortName = this.getOsShortName(osName);
     var osFamilyResult = '';
 
-    Object.keys(osFamilies).forEach(function (osFamily) {
+    Object.keys(osFamilies).some(function (osFamily) {
         var shortNames = osFamilies[osFamily];
 
         if (shortNames.indexOf(osShortName) >= 0) {
             osFamilyResult = osFamily;
+
+            return true;
         }
+
+        return false;
     });
 
     return osFamilyResult;
@@ -38,10 +42,14 @@ OS.prototype.getOsFamily = function (osName) {
 
 OS.prototype.getOsShortName = function (osName) {
     var shortNameResult = '';
-    Object.keys(shortOsNames).forEach(function (osShortName) {
+    Object.keys(shortOsNames).some(function (osShortName) {
         if (shortOsNames[osShortName] === osName) {
             shortNameResult = osShortName;
+
+            return true;
         }
+
+        return false;
     });
 
     return shortNameResult;
@@ -52,16 +60,16 @@ OS.prototype.parse = function () {
     var operatingSystems = require('./regex/os.json');
     var sUserAgent = this.source;
 
-    const result = {
+    var result = {
         name: '',
         version: '',
         platform: this.parsePlatform(this.source)
     };
 
-    operatingSystems.forEach(function (operatingSystem) {
-        const match = userAgentParser(operatingSystem.regex, sUserAgent);
+    operatingSystems.some(function (operatingSystem) {
+        var match = userAgentParser(operatingSystem.regex, sUserAgent);
 
-        if (!match) return;
+        if (!match) return false;
 
         result.name = variableReplacement(operatingSystem.name, match);
         result.version = formatVersion(variableReplacement(operatingSystem.version, match));
@@ -77,6 +85,8 @@ OS.prototype.parse = function () {
         if (result.name === 'YunOS') {
             result.name = 'YunOs';
         }
+
+        return true;
     });
 
     return result;

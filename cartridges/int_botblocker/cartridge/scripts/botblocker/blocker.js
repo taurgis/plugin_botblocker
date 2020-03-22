@@ -40,65 +40,61 @@ function validate() {
         return true;
     }
 
-    try {
-        var requestParamsMap = bbRequest.getRequestParameters(request);
-        var sIPAddress = determineIP(requestParamsMap);
-        var uUserAgent = new UserAgent(requestParamsMap.get('UserAgent'));
+    var requestParamsMap = bbRequest.getRequestParameters(request);
+    var sIPAddress = determineIP(requestParamsMap);
+    var uUserAgent = new UserAgent(requestParamsMap.get('UserAgent'));
 
-        if (empty(uUserAgent.source)) {
+    if (empty(uUserAgent.source)) {
+        return false;
+    }
+
+    if (sIPAddress != null) {
+        if (cBlackListCache.get(sIPAddress)) {
             return false;
         }
 
-        if (sIPAddress != null) {
-            if (cBlackListCache.get(sIPAddress)) {
+        var ipRequestCache = CacheMgr.getCache('bbIPRequest');
+        var oIPAddress = ipRequestCache.get(sIPAddress);
+
+        uUserAgent.parse();
+
+        if (!oIPAddress) {
+            oIPAddress = new IPAddress(sIPAddress, 1);
+        } else {
+            oIPAddress = new IPAddress(sIPAddress, oIPAddress.count + 1);
+        }
+
+        ipRequestCache.put(sIPAddress, oIPAddress);
+
+        bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count + ' and user agent ' + JSON.stringify(uUserAgent, null, 4), 'debug', 'Blocker~validate');
+
+        if (!oIPAddress.isBelowThirdThreshold()) {
+            bbLogger.log(sIPAddress + ' reached third threshold.', 'error', 'Blocker~validate');
+            cBlackListCache.put(sIPAddress, true);
+
+            return false;
+        }
+
+        if (!oIPAddress.isBelowSecondThreshold()) {
+            bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
+
+            if (!uUserAgent.isSafe()) {
+                cBlackListCache.put(sIPAddress, true);
                 return false;
             }
+        }
 
-            var ipRequestCache = CacheMgr.getCache('bbIPRequest');
-            var oIPAddress = ipRequestCache.get(sIPAddress);
+        if (!oIPAddress.isBelowFirstThreshold()) {
+            bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
 
-            uUserAgent.parse();
-
-            if (!oIPAddress) {
-                oIPAddress = new IPAddress(sIPAddress, 1);
-            } else {
-                oIPAddress = new IPAddress(sIPAddress, oIPAddress.count + 1);
-            }
-
-            ipRequestCache.put(sIPAddress, oIPAddress);
-
-            bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count + ' and user agent ' + JSON.stringify(uUserAgent, null, 4), 'debug', 'Blocker~validate');
-
-            if (!oIPAddress.isBelowThirdThreshold()) {
-                bbLogger.log(sIPAddress + ' reached third threshold.', 'error', 'Blocker~validate');
+            if (!uUserAgent.isSafe()) {
                 cBlackListCache.put(sIPAddress, true);
 
                 return false;
             }
-
-            if (!oIPAddress.isBelowSecondThreshold()) {
-                bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
-
-                if (!uUserAgent.isSafe()) {
-                    cBlackListCache.put(sIPAddress, true);
-                    return false;
-                }
-            }
-
-            if (!oIPAddress.isBelowFirstThreshold()) {
-                bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
-
-                if (!uUserAgent.isSafe()) {
-                    cBlackListCache.put(sIPAddress, true);
-
-                    return false;
-                }
-            }
-        } else {
-            return false;
         }
-    } catch (e) {
-        bbLogger.log('An error occured while trying to validate request with the Bot Blocker plugin ' + e, 'error', 'Blocker~validate');
+    } else {
+        return false;
     }
 
 

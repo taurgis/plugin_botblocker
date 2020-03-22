@@ -18,16 +18,14 @@ function validate() {
         var bbLogger = require('../util/BBLogger');
         var botBlocker = require('../botblocker/blocker');
 
-        try {
-            var isValid = botBlocker.validate();
 
-            if (!isValid) {
-                var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
-                response.redirect(redirectUrl);
-            }
-        } catch (e) {
-            bbLogger.log('An error occured while trying to check request' + e, 'error', 'BotBlockerRequestFilter~validate');
+        var isValid = botBlocker.validate();
+
+        if (!isValid) {
+            var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
+            response.redirect(redirectUrl);
         }
+
 
         bbLogger.log('Time to process request in MS: ' + (new Date().getTime() - startTime), 'debug', 'BotBlockerRequestFilter~validate');
     }
