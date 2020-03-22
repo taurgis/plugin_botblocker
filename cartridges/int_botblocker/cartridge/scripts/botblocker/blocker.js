@@ -6,6 +6,31 @@ var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
 var UserAgent = require('./useragent');
 
 /**
+ * Registers the threshold functions for handeling requests.
+ *
+ * @param {Object} oIPAddress - The IP address object to register the functions to
+ * @param {string} sIPAddress  - The current request IP address
+ * @param {Object} cBlackListCache - The blacklist cache
+ * @param {Object} uUserAgent - The user agent object for the current request
+ */
+function registerThresholds(oIPAddress, sIPAddress, cBlackListCache, uUserAgent) {
+    oIPAddress.registerThreshold(2400, function () {
+        bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
+        cBlackListCache.put(sIPAddress, true);
+        return true;
+    });
+    oIPAddress.registerThreshold(1200, function () {
+        bbLogger.log(sIPAddress + ' reached first threshold.', 'debug', 'Blocker~validate');
+        uUserAgent.parse();
+        if (!uUserAgent.isSafe()) {
+            cBlackListCache.put(sIPAddress, true);
+            return true;
+        }
+        return false;
+    });
+}
+
+/**
  * This method will act as an entry point for any request which needs to be validated.
  *
  * @returns {boolean} If the request is OK
@@ -29,6 +54,8 @@ function validate() {
 
     if (sIPAddress != null) {
         if (cBlackListCache.get(sIPAddress)) {
+            bbLogger.log('Blacklisted ' + sIPAddress + ' redirected.', 'debug', 'Blocker~validate');
+
             return false;
         }
 
@@ -43,39 +70,14 @@ function validate() {
 
         ipRequestCache.put(sIPAddress, oIPAddress);
 
+        registerThresholds(oIPAddress, sIPAddress, cBlackListCache, uUserAgent);
+
         bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count + ' and user agent ' + JSON.stringify(uUserAgent, null, 4), 'debug', 'Blocker~validate');
 
-        if (!oIPAddress.isBelowThirdThreshold()) {
-            bbLogger.log(sIPAddress + ' reached third threshold.', 'error', 'Blocker~validate');
-            cBlackListCache.put(sIPAddress, true);
-
-            return false;
-        }
-
-        if (!oIPAddress.isBelowSecondThreshold()) {
-            bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
-
-            if (!uUserAgent.isSafe()) {
-                cBlackListCache.put(sIPAddress, true);
-                return false;
-            }
-        }
-
-        if (!oIPAddress.isBelowFirstThreshold()) {
-            bbLogger.log(sIPAddress + ' reached first threshold.', 'error', 'Blocker~validate');
-            uUserAgent.parse();
-            if (!uUserAgent.isSafe()) {
-                cBlackListCache.put(sIPAddress, true);
-
-                return false;
-            }
-        }
-    } else {
-        return false;
+        return !oIPAddress.checkThresholds();
     }
 
-
-    return true;
+    return false;
 }
 
 module.exports = {
