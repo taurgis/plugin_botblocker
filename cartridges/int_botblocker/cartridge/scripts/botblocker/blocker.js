@@ -11,24 +11,32 @@ var UserAgent = require('./useragent');
  *
  * @param {Object} oIPAddress - The IP address object to register the functions to
  * @param {string} sIPAddress  - The current request IP address
- * @param {Object} uUserAgent - The user agent object for the current request
+ * @param {Object} oUserAgent - The user agent object for the current request
  */
-function registerThresholds(oIPAddress, sIPAddress, uUserAgent) {
+function registerThresholds(oIPAddress, sIPAddress, oUserAgent) {
     oIPAddress.registerThreshold(2400, function () {
         bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
+
         cBlackListCache.put(sIPAddress, true);
-        uUserAgent.parse();
-        oIPAddress.blacklist(uUserAgent);
+
+        oUserAgent.parse();
+        oIPAddress.blacklist(oUserAgent);
+
         return true;
     });
+
     oIPAddress.registerThreshold(1200, function () {
         bbLogger.log(sIPAddress + ' reached first threshold.', 'debug', 'Blocker~validate');
-        uUserAgent.parse();
-        if (!uUserAgent.isSafe()) {
+
+        oUserAgent.parse();
+
+        if (!oUserAgent.isSafe()) {
             cBlackListCache.put(sIPAddress, true);
-            oIPAddress.blacklist(uUserAgent);
+            oIPAddress.blacklist(oUserAgent);
+
             return true;
         }
+
         return false;
     });
 }
@@ -36,10 +44,10 @@ function registerThresholds(oIPAddress, sIPAddress, uUserAgent) {
 /**
  * Constructs the IP Address object based on the request IP.
  * @param {string} sIPAddress - The IP address of the request
- * @param {Object} uUserAgent - The User Agent object
+ * @param {Object} oUserAgent - The User Agent object
  * @returns {Object} - The IP address object
  */
-function constructIPAddress(sIPAddress, uUserAgent) {
+function constructIPAddress(sIPAddress, oUserAgent) {
     var IPAddress = require('../model/ipAddress');
     var ipRequestCache = CacheMgr.getCache('bbIPRequest');
     var oIPAddress = ipRequestCache.get(sIPAddress);
@@ -52,7 +60,7 @@ function constructIPAddress(sIPAddress, uUserAgent) {
 
     ipRequestCache.put(sIPAddress, oIPAddress);
 
-    registerThresholds(oIPAddress, sIPAddress, uUserAgent);
+    registerThresholds(oIPAddress, sIPAddress, oUserAgent);
 
     return oIPAddress;
 }
@@ -71,9 +79,9 @@ function validate() {
 
     var oBBRequest = new BBRequest(request);
     var sIPAddress = oBBRequest.TrueClientIP || oBBRequest['X-Real-IP'] || oBBRequest.IP;
-    var uUserAgent = new UserAgent(oBBRequest.UserAgent);
+    var oUserAgent = new UserAgent(oBBRequest.UserAgent);
 
-    if (empty(uUserAgent.source)) {
+    if (empty(oUserAgent.source)) {
         return false;
     }
 
@@ -84,11 +92,15 @@ function validate() {
             return false;
         }
 
-        var oIPAddress = constructIPAddress(sIPAddress, uUserAgent);
+        var oIPAddress = constructIPAddress(sIPAddress, oUserAgent);
 
         bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count, 'debug', 'Blocker~validate');
 
-        return !oIPAddress.checkThresholds();
+        var reachedTreshold = oIPAddress.checkThresholds();
+
+        oIPAddress.save(oUserAgent);
+
+        return !reachedTreshold;
     }
 
     return false;

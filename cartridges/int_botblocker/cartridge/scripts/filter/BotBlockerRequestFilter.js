@@ -1,6 +1,5 @@
 'use strict';
 
-/* API Includes */
 var Status = require('dw/system/Status');
 var URLUtils = require('dw/web/URLUtils');
 
@@ -18,7 +17,6 @@ function validate() {
         var bbLogger = require('../util/BBLogger');
         var botBlocker = require('../botblocker/blocker');
 
-
         var isValid = botBlocker.validate();
 
         if (!isValid) {
@@ -33,7 +31,6 @@ function validate() {
     return new Status(Status.OK);
 }
 
-/* Module Exports */
 module.exports = {
     onRequest: validate
 };
