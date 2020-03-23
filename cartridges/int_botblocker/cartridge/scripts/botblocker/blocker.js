@@ -17,6 +17,8 @@ function registerThresholds(oIPAddress, sIPAddress, uUserAgent) {
     oIPAddress.registerThreshold(2400, function () {
         bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
         cBlackListCache.put(sIPAddress, true);
+        uUserAgent.parse();
+        oIPAddress.blacklist(uUserAgent);
         return true;
     });
     oIPAddress.registerThreshold(1200, function () {
@@ -24,6 +26,7 @@ function registerThresholds(oIPAddress, sIPAddress, uUserAgent) {
         uUserAgent.parse();
         if (!uUserAgent.isSafe()) {
             cBlackListCache.put(sIPAddress, true);
+            oIPAddress.blacklist(uUserAgent);
             return true;
         }
         return false;
@@ -49,7 +52,7 @@ function constructIPAddress(sIPAddress, uUserAgent) {
 
     ipRequestCache.put(sIPAddress, oIPAddress);
 
-    registerThresholds(oIPAddress, sIPAddress, cBlackListCache, uUserAgent);
+    registerThresholds(oIPAddress, sIPAddress, uUserAgent);
 
     return oIPAddress;
 }
@@ -83,7 +86,7 @@ function validate() {
 
         var oIPAddress = constructIPAddress(sIPAddress, uUserAgent);
 
-        bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count + ' and user agent ' + JSON.stringify(uUserAgent, null, 4), 'debug', 'Blocker~validate');
+        bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count, 'debug', 'Blocker~validate');
 
         return !oIPAddress.checkThresholds();
     }

@@ -60,4 +60,23 @@ IpAddress.prototype.isExpired = function () {
     return secondsSinceFirstRequest > 120;
 };
 
+IpAddress.prototype.blacklist = function (oUserAgent) {
+    var CustomObjectMgr = require('dw/object/CustomObjectMgr');
+    var Transaction = require('dw/system/Transaction');
+    var sIp = this.ip;
+    var iCount = this.count;
+    var iAge = this.age;
+    var oBlackListedIP = CustomObjectMgr.getCustomObject('BotBlocker_Blacklisted', sIp);
+
+    Transaction.wrap(function () {
+        if (!oBlackListedIP) {
+            oBlackListedIP = CustomObjectMgr.createCustomObject('BotBlocker_Blacklisted', sIp);
+        }
+
+        oBlackListedIP.custom.userAgent = JSON.stringify(oUserAgent, null, 4);
+        oBlackListedIP.custom.count = iCount;
+        oBlackListedIP.custom.age = (new Date().getTime() - iAge) / 1000;
+    });
+};
+
 module.exports = IpAddress;
