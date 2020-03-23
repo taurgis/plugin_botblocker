@@ -1,8 +1,14 @@
 'use strict';
 
-module.exports = function (sKey) {
-    var System = require('dw/system/System');
-    var oOrganizationPrefs = System.getPreferences();
+var CacheMgr = require('dw/system/CacheMgr');
+var cPreferenceCache = CacheMgr.getCache('bbPreferences');
 
-    return oOrganizationPrefs.getCustom()[sKey];
+module.exports = function (sKey) {
+    return cPreferenceCache.get(sKey, function () {
+        var System = require('dw/system/System');
+        var oOrganizationPrefs = System.getPreferences();
+        var result = oOrganizationPrefs.getCustom()[sKey];
+
+        return result;
+    });
 };

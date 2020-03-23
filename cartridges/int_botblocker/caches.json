@@ -1,6 +1,10 @@
 {
     "caches": [
         {
+            "id": "bbPreferences",
+            "expireAfterSeconds": 300
+        },
+        {
             "id": "bbIPRequest",
             "expireAfterSeconds": 60
         },
