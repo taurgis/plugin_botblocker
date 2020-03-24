@@ -3,6 +3,7 @@
 var Status = require('dw/system/Status');
 var URLUtils = require('dw/web/URLUtils');
 
+
 /**
  * This method will intercept all incoming requests in the storefront and will only validate requests
  * that meets certain criteria. The method will skip remote includes and non HTTP requests.
@@ -20,8 +21,12 @@ function validate() {
         var isValid = botBlocker.validate();
 
         if (!isValid) {
-            var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
-            response.redirect(redirectUrl);
+            var getPreference = require('../util/getPreference');
+
+            if (!getPreference('disableBlacklisting')) {
+                var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
+                response.redirect(redirectUrl);
+            }
         }
 
 
