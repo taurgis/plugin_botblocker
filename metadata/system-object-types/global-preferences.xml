@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="OrganizationPreferences">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="disableBlacklisting">
+                <display-name xml:lang="x-default">Disable blacklisting</display-name>
+                <description xml:lang="x-default">Make the plugin run in test mode. When enabled, IP's will be added to the blacklisted custom object, but will still be allowed on the site. This mode is recommended to find out the correct thresholds for your site.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="enableIPCustomObject">
+                <display-name xml:lang="x-default">Enable IP Custom Object Logging</display-name>
+                <description xml:lang="x-default">Enables the creation of custom objects for each IP to monitor. This has a negative effect on performance, and should only be enabled for debugging purposes.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="firstBlockThreshold">
+                <display-name xml:lang="x-default">First threshold</display-name>
+                <description xml:lang="x-default">The number of requests that will trigger the first level of validation.&#13;
+&#13;
+1) If it is a known bot: Allow&#13;
+2) If it is a known browser: Allow&#13;
+3) If it is a know library: Disallow</description>
+                <type>int</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>1200</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="ipTTL">
+                <display-name xml:lang="x-default">IP TTL</display-name>
+                <description xml:lang="x-default">The amount of time in seconds we track the amount of requests an IP makes. We will check if this amount of requests has been made within the TTL timeframe, if not the request counter resets to 0.&#13;
+&#13;
+Note: If you set this too long, valid users will reach the configured thresholds.</description>
+                <type>int</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>120</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="secondBlockThreshold">
+                <display-name xml:lang="x-default">Second threshold</display-name>
+                <description xml:lang="x-default">The number of requests that will trigger the second level of validation. If this threshold is reached, the IP will be banned.</description>
+                <type>int</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>2400</default-value>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="botblocker">
+                <display-name xml:lang="x-default">Bot Blocker</display-name>
+                <attribute attribute-id="enableIPCustomObject"/>
+                <attribute attribute-id="disableBlacklisting"/>
+                <attribute attribute-id="firstBlockThreshold"/>
+                <attribute attribute-id="secondBlockThreshold"/>
+                <attribute attribute-id="ipTTL"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+</metadata>
