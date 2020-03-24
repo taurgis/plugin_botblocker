@@ -2,6 +2,7 @@
 
 var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
 var getPreference = require('../util/getPreference');
+
 /**
  * The IpAddress object to manage information related to the IP.
  * @constructor
@@ -30,6 +31,8 @@ IpAddress.prototype.registerThreshold = function (amount, fCallbackFunction) {
 };
 
 IpAddress.prototype.checkThresholds = function () {
+    if (!this.thresholds) return false;
+
     var currentCount = this.count;
     var oThresholds = this.thresholds;
     var bThresholdReached = false;
@@ -58,7 +61,7 @@ IpAddress.prototype.isExpired = function () {
     var curTime = new Date().getTime();
     var secondsSinceFirstRequest = (curTime - this.age) / 1000;
 
-    return secondsSinceFirstRequest > 120;
+    return secondsSinceFirstRequest > getPreference('ipTTL');
 };
 
 IpAddress.prototype.blacklist = function (oUserAgent) {

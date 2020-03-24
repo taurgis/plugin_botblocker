@@ -5,6 +5,7 @@ var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
 var BBRequest = require('~/cartridge/scripts/model/request');
 var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
 var UserAgent = require('./useragent');
+var getPreference = require('../util/getPreference');
 
 /**
  * Registers the threshold functions for handeling requests.
@@ -14,31 +15,33 @@ var UserAgent = require('./useragent');
  * @param {Object} oUserAgent - The user agent object for the current request
  */
 function registerThresholds(oIPAddress, sIPAddress, oUserAgent) {
-    oIPAddress.registerThreshold(2400, function () {
-        bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
+    if (oIPAddress.count > (getPreference('firstBlockThreshold') * 0.75)) {
+        oIPAddress.registerThreshold(getPreference('secondBlockThreshold'), function () {
+            bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
 
-        cBlackListCache.put(sIPAddress, true);
-
-        oUserAgent.parse();
-        oIPAddress.blacklist(oUserAgent);
-
-        return true;
-    });
-
-    oIPAddress.registerThreshold(1200, function () {
-        bbLogger.log(sIPAddress + ' reached first threshold.', 'debug', 'Blocker~validate');
-
-        oUserAgent.parse();
-
-        if (!oUserAgent.isSafe()) {
             cBlackListCache.put(sIPAddress, true);
+
+            oUserAgent.parse();
             oIPAddress.blacklist(oUserAgent);
 
             return true;
-        }
+        });
 
-        return false;
-    });
+        oIPAddress.registerThreshold(getPreference('firstBlockThreshold'), function () {
+            bbLogger.log(sIPAddress + ' reached first threshold.', 'debug', 'Blocker~validate');
+
+            oUserAgent.parse();
+
+            if (!oUserAgent.isSafe()) {
+                cBlackListCache.put(sIPAddress, true);
+                oIPAddress.blacklist(oUserAgent);
+
+                return true;
+            }
+
+            return false;
+        });
+    }
 }
 
 /**
