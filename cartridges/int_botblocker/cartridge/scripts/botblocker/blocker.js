@@ -69,6 +69,37 @@ function constructIPAddress(sIPAddress, oUserAgent) {
 }
 
 /**
+ * Determines wether or not the IP address has been blacklisted.
+ * @param {Object} oIPAddress - The IP address object
+ *
+ * @returns {boolean} - Wether or not the IP is blacklisted
+ */
+function determineIfIPBlacklisted(oIPAddress) {
+    var cachedBlackListStatus = cBlackListCache.get(oIPAddress.ip);
+    if (cachedBlackListStatus === true) {
+        bbLogger.log('Blacklisted ' + oIPAddress.ip + ' redirected.', 'debug', 'Blocker~validate');
+
+        return true;
+    } if (cachedBlackListStatus === false) {
+        return false;
+    }
+
+    var CustomObjectMgr = require('dw/object/CustomObjectMgr');
+    var oBlackListedIP = CustomObjectMgr.getCustomObject('BotBlocker_Blacklisted', oIPAddress.ip);
+
+    if (oBlackListedIP) {
+        if (oBlackListedIP.custom.status.value > 0) {
+            cBlackListCache.put(oIPAddress.ip, true);
+            return true;
+        }
+    }
+
+    cBlackListCache.put(oIPAddress.ip, false);
+
+    return false;
+}
+
+/**
  * This method will act as an entry point for any request which needs to be validated.
  *
  * @returns {boolean} If the request is OK
@@ -89,13 +120,11 @@ function validate() {
     }
 
     if (sIPAddress != null) {
-        if (cBlackListCache.get(sIPAddress)) {
-            bbLogger.log('Blacklisted ' + sIPAddress + ' redirected.', 'debug', 'Blocker~validate');
+        var oIPAddress = constructIPAddress(sIPAddress, oUserAgent);
 
+        if (determineIfIPBlacklisted(oIPAddress)) {
             return false;
         }
-
-        var oIPAddress = constructIPAddress(sIPAddress, oUserAgent);
 
         bbLogger.log('Got IP ' + sIPAddress + ' with request count ' + oIPAddress.count, 'debug', 'Blocker~validate');
 

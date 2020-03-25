@@ -80,6 +80,7 @@ IpAddress.prototype.blacklist = function (oUserAgent) {
         oBlackListedIP.custom.userAgent = JSON.stringify(oUserAgent, null, 4);
         oBlackListedIP.custom.count = iCount;
         oBlackListedIP.custom.age = (new Date().getTime() - iAge) / 1000;
+        oBlackListedIP.custom.status = 1;
     });
 };
 
