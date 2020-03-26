@@ -1,0 +1,46 @@
+{
+    "step-types": {
+        "script-module-step": [{
+                "@type-id": "custom.forward.botblocker.BuildBlacklistCache",
+                "module": "bc_jobs_botblocker/cartridge/scripts/jobsteps/buildBlacklist.js",
+                "description": "Builds up the blacklist cache from known lists.",
+                "function": "Run",
+                "parameters": {
+                    "parameter": [{
+                        "@name":"ListCount",
+                        "@type":"string",
+                        "@required":"true",
+                        "@trim":"false",
+                        "description":"The number of lists an IP should be in before it is considered blacklisted.",
+                        "enum-values":
+                        {
+                          "value":
+                          [
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "6",
+                            "7",
+                            "8"
+                          ]
+                        }
+                      }
+                    ]
+                },
+                "status-codes": {
+                    "status": [{
+                            "@code": "ERROR",
+                            "description": "Used when an error occurred."
+                        },
+                        {
+                            "@code": "OK",
+                            "description": "Used when execution was successful."
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
