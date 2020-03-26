@@ -10,7 +10,7 @@
         },
         {
             "id": "bbBlacklisted",
-            "expireAfterSeconds": 3600
+            "expireAfterSeconds": 86400
         },
         {
             "id": "bbRegex",

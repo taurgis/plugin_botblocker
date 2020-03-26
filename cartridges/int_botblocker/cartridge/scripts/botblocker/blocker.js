@@ -78,7 +78,7 @@ function determineIfIPBlacklisted(oIPAddress) {
     var cachedBlackListStatus = cBlackListCache.get(oIPAddress.ip);
     if (cachedBlackListStatus === true) {
         bbLogger.log('Blacklisted ' + oIPAddress.ip + ' redirected.', 'debug', 'Blocker~validate');
-
+        oIPAddress.blacklist();
         return true;
     } if (cachedBlackListStatus === false) {
         return false;
