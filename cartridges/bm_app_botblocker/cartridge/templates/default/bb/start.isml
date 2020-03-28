@@ -1,13 +1,57 @@
-<isdecorate template="application/MenuFrame">
-<iscontent type="text/html" charset="UTF-8">
-<isinclude template="inc/Modules">
+<isinclude template="inc/Modules" />
+<isdecorate template="page/page.isml">
+    <isbreadcrumb name1="${pdict.CurrentHttpParameterMap.mainmenuname.stringValue}" url1="${TOP_URL.toString()}" name2="Browse Remote - Http" />
+    <hr/>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="overview_title">IP Monitor</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table data-classes="table table-striped" data-toggle="table">
+                    <thead>
+                        <tr>
+                        <th scope="col" data-sortable="true">IP</th>
+                        <th scope="col" data-width="150" data-width-unit="px">User Agent</th>
+                        <th scope="col" data-sortable="true">Count</th>
+                        <th scope="col" data-sortable="true">Age</th>
+                        <th scope="col" data-sortable="true">First pageview</th>
+                        <th scope="col" data-sortable="true">Last pageview</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <isloop iterator="${pdict.IPItems}" alias="IPItem">
+                            <tr>
+                                <th scope="row">
+                                    ${IPItem.custom.IP}
+                                </th>
+                                <td>
+                                    <pre>
+                                        ${IPItem.custom.userAgent}
+                                    </pre>
+                                </td>
+                                <td>
+                                    ${IPItem.custom.count}
+                                </td>
+                                <td >
+                                    ${IPItem.custom.age}
+                                </td>
+                                <td>
+                                    <isprint value="${IPItem.creationDate}" style="DATE_SHORT" timezone="SITE" />
+                                    <isprint value="${IPItem.creationDate}" style="DATE_TIME" timezone="SITE" />
+                                </td>
+                                <td >
+                                    <isprint value="${IPItem.lastModified}" style="DATE_SHORT" timezone="SITE" />
+                                    <isprint value="${IPItem.lastModified}" style="DATE_TIME" timezone="SITE" />
+                                </td>
+                            </tr>
+                        </isloop>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-<isset name="TOP_URL"   value="${URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', pdict.CurrentHttpParameterMap.CurrentMenuItemId)}" scope="PAGE">
-<ISBreadcrumb name1="${pdict.CurrentHttpParameterMap.mainmenuname.stringValue}" url1="${TOP_URL.toString()}" name2="Browse Remote - Http">
-<hr/>
-
-<h1 class="overview_title">IP Monitor</h1>
-<isloop iterator="${pdict.IPItems}" alias="IPItem">
-<p>IP: ${IPItem.custom.IP}</p>
-</isloop>
 </isdecorate>
