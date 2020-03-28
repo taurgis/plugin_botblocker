@@ -4,8 +4,12 @@
  * @module meta
  */
 
+var Resource = require('dw/web/Resource');
+var Logger = require('dw/system/Logger');
+var URLUtils = require('dw/web/URLUtils');
+
 var HOME_BREADCRUMB = {
-    name: dw.web.Resource.msg('global.home', 'locale', null),
+    name: Resource.msg('global.home', 'locale', null),
     url: 'oops' // dw.web.URLUtils.httpHome()
 };
 
@@ -47,35 +51,36 @@ Meta.prototype = {
      * meta.update('account.landing')
      */
     update: function (object) {
+        var curObject = object;
         // check if object wrapped in AbstractModel and get system object if so get the system object
-        if ('object' in object) {
-            object = object.object;
+        if ('object' in curObject) {
+            curObject = curObject.object;
         }
         // check if it is a system object
-        if (object.class) {
+        if (curObject.class) {
             // update metadata
             var title = null;
-            if ('pageTitle' in object) {
-                title = object.pageTitle;
+            if ('pageTitle' in curObject) {
+                title = curObject.pageTitle;
             }
-            if (!title && 'name' in object) {
-                title = object.name;
-            } else if (!title && 'displayName' in object) {
-                title = object.displayName;
+            if (!title && 'name' in curObject) {
+                title = curObject.name;
+            } else if (!title && 'displayName' in curObject) {
+                title = curObject.displayName;
             }
             this.data.page.title = title;
-            if ('pageKeywords' in object && object.pageKeywords) {
-                this.data.page.keywords = object.pageKeywords;
+            if ('pageKeywords' in curObject && curObject.pageKeywords) {
+                this.data.page.keywords = curObject.pageKeywords;
             }
-            if ('pageDescription' in object && object.pageDescription) {
-                this.data.page.description = object.pageDescription;
+            if ('pageDescription' in curObject && curObject.pageDescription) {
+                this.data.page.description = curObject.pageDescription;
             }
 
             this.updatePageMetaData();
 
             // Update breadcrumbs for content
-            if (object.class === dw.content.Content) {
-                var path = require('~/cartridge/scripts/models/ContentModel').get(object).getFolderPath();
+            if (curObject.class === dw.content.Content) {
+                var path = require('~/cartridge/scripts/models/ContentModel').get(curObject).getFolderPath();
                 this.data.breadcrumbs = path.map(function (folder) {
                     return {
                         name: folder.displayName
@@ -83,23 +88,23 @@ Meta.prototype = {
                 });
                 this.data.breadcrumbs.unshift(HOME_BREADCRUMB);
                 this.data.breadcrumbs.push({
-                    name: object.name,
-                    url: dw.web.URLUtils.url('Page-Show', 'cid', object.ID)
+                    name: curObject.name,
+                    url: URLUtils.url('Page-Show', 'cid', curObject.ID)
                 });
-                dw.system.Logger.debug('Content breadcrumbs calculated: ' + JSON.stringify(this.data.breadcrumbs));
+                Logger.debug('Content breadcrumbs calculated: ' + JSON.stringify(this.data.breadcrumbs));
             }
-        } else if (typeof object === 'string') {
+        } else if (typeof curObject === 'string') {
             // @TODO Should ideally allow to pass something like account.overview, account.wishlist etc.
             // and at least generate the breadcrumbs & page title
         } else {
-            if (object.pageTitle) {
-                this.data.page.title = object.pageTitle;
+            if (curObject.pageTitle) {
+                this.data.page.title = curObject.pageTitle;
             }
-            if (object.pageKeywords) {
-                this.data.page.keywords = object.pageKeywords;
+            if (curObject.pageKeywords) {
+                this.data.page.keywords = curObject.pageKeywords;
             }
-            if (object.pageDescription) {
-                this.data.page.description = object.pageDescription;
+            if (curObject.pageDescription) {
+                this.data.page.description = curObject.pageDescription;
             }
             // @TODO do an _.extend(this.data, object) of the passed object
         }
@@ -136,7 +141,7 @@ Meta.prototype = {
      * @param {string} defaultValue Optional default value, empty string otherwise
      */
     addResource: function (key, bundle, defaultValue) {
-        this.data.resources[key] = dw.web.Resource.msg(key, bundle, defaultValue || '');
+        this.data.resources[key] = Resource.msg(key, bundle, defaultValue || '');
     },
     /**
      * Dumps the internally held data into teh DOM
