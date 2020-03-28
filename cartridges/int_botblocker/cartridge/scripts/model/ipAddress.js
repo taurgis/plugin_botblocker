@@ -86,27 +86,8 @@ IpAddress.prototype.blacklist = function (oUserAgent) {
 
 IpAddress.prototype.save = function (oUserAgent) {
     if (getPreference('enableIPCustomObject')) {
-        var CustomObjectMgr = require('dw/object/CustomObjectMgr');
-        var Transaction = require('dw/system/Transaction');
-        var sIp = this.ip;
-        var iCount = this.count;
-        var iAge = this.age;
-
-        try {
-            var oBotBlockerIP = CustomObjectMgr.getCustomObject('BotBlocker_IP', sIp);
-
-            Transaction.wrap(function () {
-                if (!oBotBlockerIP) {
-                    oBotBlockerIP = CustomObjectMgr.createCustomObject('BotBlocker_IP', sIp);
-                }
-
-                oBotBlockerIP.custom.userAgent = JSON.stringify(oUserAgent, null, 4);
-                oBotBlockerIP.custom.count = iCount;
-                oBotBlockerIP.custom.age = (new Date().getTime() - iAge) / 1000;
-            });
-        } catch (e) {
-            bbLogger.log('Exception saving Bot Blocker IP custom object for IP ' + sIp + '. Exception: ' + e, 'error', 'IPAddress~expireIfNecessary');
-        }
+        var IPMgr = require('../managers/IPMgr');
+        IPMgr.saveIPAddress(this, oUserAgent);
     }
 };
 
