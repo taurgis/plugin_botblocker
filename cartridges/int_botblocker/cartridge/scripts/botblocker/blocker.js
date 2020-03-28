@@ -84,8 +84,8 @@ function determineIfIPBlacklisted(oIPAddress) {
         return false;
     }
 
-    var CustomObjectMgr = require('dw/object/CustomObjectMgr');
-    var oBlackListedIP = CustomObjectMgr.getCustomObject('BotBlocker_Blacklisted', oIPAddress.ip);
+    var IPBlackListMgr = require('../managers/IPBlacklistMgr');
+    var oBlackListedIP = IPBlackListMgr.getIPAddress(oIPAddress.ip);
 
     if (oBlackListedIP) {
         if (oBlackListedIP.custom.status.value > 0) {

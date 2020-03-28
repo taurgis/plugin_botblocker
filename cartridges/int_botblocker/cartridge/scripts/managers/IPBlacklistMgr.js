@@ -10,7 +10,7 @@ var Transaction = require('dw/system/Transaction');
  * @returns {Object|null} - The IP address object
  */
 function getIPAddress(sIPAddress) {
-    var oBotBlockerIP = CustomObjectMgr.getCustomObject('BotBlocker_IP', sIPAddress);
+    var oBotBlockerIP = CustomObjectMgr.getCustomObject('BotBlocker_Blacklisted', sIPAddress);
 
     if (oBotBlockerIP) {
         return oBotBlockerIP;
@@ -30,20 +30,21 @@ function getIPAddress(sIPAddress) {
  */
 function saveIPAddress(oIPAddress, oUserAgent) {
     try {
-        var oBotBlockerIP = getIPAddress(oIPAddress.ip);
+        var oBlackListedIP = getIPAddress(oIPAddress.ip);
 
         Transaction.wrap(function () {
-            if (!oBotBlockerIP) {
-                oBotBlockerIP = CustomObjectMgr.createCustomObject('BotBlocker_IP', oIPAddress.ip);
+            if (!oBlackListedIP) {
+                oBlackListedIP = CustomObjectMgr.createCustomObject('BotBlocker_Blacklisted', oIPAddress.id);
             }
 
-            oBotBlockerIP.custom.userAgent = JSON.stringify(oUserAgent || {}, null, 4);
-            oBotBlockerIP.custom.count = oIPAddress.count;
-            oBotBlockerIP.custom.age = (new Date().getTime() - oIPAddress.age) / 1000;
+            oBlackListedIP.custom.userAgent = JSON.stringify(oUserAgent || {}, null, 4);
+            oBlackListedIP.custom.count = oIPAddress.count;
+            oBlackListedIP.custom.age = (new Date().getTime() - oIPAddress.age) / 1000;
+            oBlackListedIP.custom.status = 1;
         });
     } catch (e) {
         var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
-        bbLogger.log('Exception saving Bot Blocker IP custom object for IP ' + oIPAddress.ip + '. Exception: ' + e, 'error', 'IPMgr~saveIPAddress');
+        bbLogger.log('Exception blacklisting IP ' + oIPAddress.ip + '. Exception: ' + e, 'error', 'IPBlacklistMgr~saveIPAddress');
 
         return false;
     }
