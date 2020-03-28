@@ -7,5 +7,7 @@
 <hr/>
 
 <h1 class="overview_title">IP Monitor</h1>
-
+<isloop iterator="${pdict.IPItems}" alias="IPItem">
+<p>IP: ${IPItem.custom.IP}</p>
+</isloop>
 </isdecorate>

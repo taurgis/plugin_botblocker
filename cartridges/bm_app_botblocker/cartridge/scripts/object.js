@@ -12,25 +12,29 @@
  * @return {Object} - The extended object
  */
 exports.extend = function (target, source) {
-    var extendedTarget = target;
-    var extendFunction = this.extend;
-    if (!target) {
+    var adaptedSource;
+    var adaptedTarget = target;
+
+    if (!adaptedTarget) {
         return source;
     }
 
-    Array(arguments).forEach(function (extendedSource) {
-        Object.keys(extendedSource).forEach(function (prop) {
+    for (var i = 1; i < arguments.length; i++) {
+        adaptedSource = arguments[i];
+        // eslint-disable-next-line no-restricted-syntax
+        for (var prop in adaptedSource) {
             // recurse for non-API objects
-            if (extendedSource[prop] && typeof extendedSource[prop] === 'object' && !extendedSource[prop].class) {
-                extendedTarget[prop] = extendFunction(extendedTarget[prop], extendedSource[prop]);
+            if (adaptedSource[prop] && typeof adaptedSource[prop] === 'object' && !adaptedSource[prop].class) {
+                adaptedTarget[prop] = this.extend(adaptedTarget[prop], adaptedSource[prop]);
             } else {
-                extendedTarget[prop] = extendedSource[prop];
+                adaptedTarget[prop] = adaptedSource[prop];
             }
-        });
-    });
+        }
+    }
 
-    return extendedTarget;
+    return adaptedTarget;
 };
+
 
 /**
  * Access given properties of an object recursively

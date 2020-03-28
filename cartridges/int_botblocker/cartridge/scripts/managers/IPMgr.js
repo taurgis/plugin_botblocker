@@ -51,7 +51,25 @@ function saveIPAddress(oIPAddress, oUserAgent) {
     return true;
 }
 
+/**
+ * Gets
+ * @param {Date} startDate - The start date
+ * @param {Date} endDate - The end date
+ *
+ * @returns {Iterable<Object>} - The items between the start and end date
+ */
+function getAllBetweenDates(startDate, endDate) {
+    var result = CustomObjectMgr.queryCustomObjects('BotBlocker_IP', 'creationDate  >= {0} AND creationDate  <= {1}', 'lastModified desc', startDate, endDate);
+
+    if (result && result.count > 0) {
+        return result;
+    }
+
+    return null;
+}
+
 module.exports = {
     getIPAddress: getIPAddress,
-    saveIPAddress: saveIPAddress
+    saveIPAddress: saveIPAddress,
+    getAllBetweenDates: getAllBetweenDates
 };
