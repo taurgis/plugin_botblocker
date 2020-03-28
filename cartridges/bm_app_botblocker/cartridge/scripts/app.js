@@ -5,7 +5,10 @@
  */
 
 /**
- * Returns the model for the given name. The model is expected under the models directory.
+ * Fetches a model based on the model name.
+ *
+ * @param {string} modelName - The model name
+ * @returns {Object} - the model for the given name. The model is expected under the models directory.
  */
 exports.getModel = function (modelName) {
     return require('./models/' + modelName + 'Model');
@@ -38,6 +41,7 @@ exports.getView = function (viewName, parameters) {
         } else {
             // use first argument as parameters if not a string
             // to allow for anonymous views
+            // eslint-disable-next-line no-param-reassign
             parameters = viewName;
             View = require('./views/View');
         }
@@ -50,8 +54,8 @@ exports.getView = function (viewName, parameters) {
 /**
  * Use this method to get a new instance for a given form reference or form object.
  *
- * @param formReference {dw.web.FormElement|String} Demandware form id (/forms/$name$.xml) or Demandware form object.
- * @returns {module:models/FormModel~FormModel}
+ * @param {Object} formReference {dw.web.FormElement|String} Demandware form id (/forms/$name$.xml) or Demandware form object.
+ * @returns {module:models/FormModel~FormModel} - The form
  * @example
  * // simple form preparation
  * var form = require('~/app').getForm('registration');
@@ -85,6 +89,9 @@ exports.getForm = function (formReference) {
 
 /**
  * Returns the controller with the given name.
+ *
+ * @param {string} controllerName - The controller name
+ * @returns {Object} - The controller
  */
 exports.getController = function (controllerName) {
     return require('~/cartridge/controllers/' + controllerName);

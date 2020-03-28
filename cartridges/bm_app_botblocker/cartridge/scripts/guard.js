@@ -16,18 +16,23 @@
  * exports.Show = require('~/guard').ensure(['get','https','loggedIn'],show);
  */
 var browsing = require('~/cartridge/scripts/util/Browsing');
-var LOGGER = dw.system.Logger.getLogger('guard');
+var Logger = require('dw/system/Logger');
+var URLUtils = require('dw/web/URLUtils');
+var LOGGER = Logger.getLogger('guard');
 
 /**
  * This method contains the login to handle a not logged in customer
  *
  * @param {Object} params Parameters passed along by by ensure
+ *
+ * @returns {boolean} - Wether or not the user is authenticated
  */
 function requireLogin(params) {
+    // eslint-disable-next-line no-undef
     if (customer.authenticated) {
         return true;
     }
-    var redirectUrl = dw.web.URLUtils.https('Login-Show', 'original', browsing.lastUrl());
+    var redirectUrl = URLUtils.https('Login-Show', 'original', browsing.lastUrl());
 
     if (params && params.scope) {
         redirectUrl.append('scope', params.scope);
@@ -40,7 +45,7 @@ function requireLogin(params) {
 /**
  * Performs a protocol switch for the URL of the current request to HTTPS. Responds with a redirect to the client.
  *
- * @return false, if switching is not possible (for example, because its a POST request)
+ * @return {boolean} - false, if switching is not possible (for example, because its a POST request)
  */
 function switchToHttps() {
     if (request.httpMethod !== 'GET') {
@@ -64,23 +69,32 @@ function switchToHttps() {
  * @namespace
  */
 var Filters = {
-    /** Action must be accessed via HTTPS */
     https: function () { return request.isHttpSecure(); },
-    /** Action must be accessed via HTTP */
     http: function () { return !this.https(); },
-    /** Action must be accessed via a GET request */
     get: function () { return request.httpMethod === 'GET'; },
-    /** Action must be accessed via a POST request */
     post: function () { return request.httpMethod === 'POST'; },
-    /** Action must only be accessed authenticated csutomers */
+    // eslint-disable-next-line no-undef
     loggedIn: function () { return customer.authenticated; },
-    /** Action must only be used as remote include */
     include: function () {
         // the main request will be something like kjhNd1UlX_80AgAK-0-00, all includes
         // have incremented trailing counters
         return request.httpHeaders['x-is-requestid'].indexOf('-0-00') === -1;
     }
 };
+
+
+/**
+ * Exposes the given action to be accessible from the web. The action gets a property which marks it as exposed. This
+ * property is checked by the platform.
+ *
+ * @param {Object} action - The action
+ * @returns {Object} - The action made public
+ */
+function expose(action) {
+    // eslint-disable-next-line no-param-reassign
+    action.public = true;
+    return action;
+}
 
 /**
  * This function should be used to secure public endpoints by applying a set of predefined filters.
@@ -90,14 +104,17 @@ var Filters = {
  * @param  {Object}   params  Additional parameters which are passed to all filters and the action
  * @see module:guard~Filters
  * @see module:guard
+ * @returns {Object} - The exposed action
  */
 function ensure(filters, action, params) {
     return expose(function (args) {
         var error;
         var filtersPassed = true;
         var errors = [];
+        // eslint-disable-next-line no-param-reassign
         params = require('~/cartridge/scripts/object').extend(params, args);
 
+        // eslint-disable-next-line no-plusplus
         for (var i = 0; i < filters.length; i++) {
             LOGGER.debug('Ensuring guard "{0}"...', filters[i]);
 
@@ -128,14 +145,6 @@ function ensure(filters, action, params) {
     });
 }
 
-/**
- * Exposes the given action to be accessible from the web. The action gets a property which marks it as exposed. This
- * property is checked by the platform.
- */
-function expose(action) {
-    action.public = true;
-    return action;
-}
 
 /*
  * Module exports
@@ -143,11 +152,12 @@ function expose(action) {
 /** @see module:guard~expose */
 exports.all = expose;
 
-// often needed combinations
 /**
  * @see module:guard~https
  * @see module:guard~get
+ * @param {Object} action - The action
  * @deprecated Use ensure(['https','get'], action) instead
+ * @returns {Object} - The action made public with https and get
  */
 exports.httpsGet = function (action) {
     return ensure(['https', 'get'], action);
@@ -156,7 +166,9 @@ exports.httpsGet = function (action) {
 /**
  * @see module:guard~https
  * @see module:guard~post
+ * @param {Object} action - The action
  * @deprecated Use ensure(['https','post'], action) instead
+ * @returns {Object} - The action made public with https and get
  */
 exports.httpsPost = function (action) {
     return ensure(['https', 'post'], action);

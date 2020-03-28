@@ -1,3 +1,7 @@
+/* eslint-disable no-caller */
+/* eslint-disable no-restricted-properties */
+/* eslint-disable no-shadow */
+/* eslint-disable no-underscore-dangle */
 /* jshint strict: false */
 
 /**
@@ -40,8 +44,13 @@
  *         this._super();
  *     }
  */
-// Hack, because vars cannot be imported in DW, only functions
-function Class() {}
+
+/**
+ * Hack, because vars cannot be imported in DW, only functions
+ */
+function Class() {
+    // Do nothing
+}
 
 (function () {
     var initializing = false;
@@ -82,12 +91,16 @@ function Class() {}
                 return ret;
             };
         };
-        for (var name in prop) {
+
+        Object.keys(prop).forEach(function (name) {
             // Check if we're overwriting an existing function
             prototype[name] = typeof prop[name] === 'function' && typeof _super[name] === 'function' && fnTest.test(prop[name]) ? callback(name, prop[name]) : prop[name];
-        }
+        });
 
-        // The dummy class constructor
+
+        /**
+         * Dummy constructor
+         */
         function Class() {
             // All construction is actually done in the init method
             if (!initializing && this.init) {

@@ -29,7 +29,7 @@ var View = Class.extend({
      * @extends module:util/Class~Class
      * @param {Object} params The parameters to pass.
      * @see {@link module:object} for information on the extend function.
-     * @returns {module:views/View~View}
+     * @returns {module:views/View~View} - This
      */
     init: function (params) {
         // Copies all properties of params to the view.
@@ -57,7 +57,7 @@ var View = Class.extend({
      * @return {module:views/View~View} Returns the current view.
      */
     render: function (templateName) {
-        templateName = templateName || this.template;
+        var curTemplateName = templateName || this.template;
         // provide reference to View itself
         this.View = this;
         // provide Meta
@@ -65,14 +65,16 @@ var View = Class.extend({
         // backward compatibility
         this.CurrentForms = session.forms;
         this.CurrentHttpParameterMap = request.httpParameterMap;
+        // eslint-disable-next-line no-undef
         this.CurrentCustomer = customer;
         this.CurrentSession = session;
         this.CurrentPageMetaData = request.pageMetaData;
         this.CurrentRequest = request;
         try {
-            ISML.renderTemplate(templateName, this);
+            ISML.renderTemplate(curTemplateName, this);
         } catch (e) {
-            dw.system.Logger.error('Error while rendering template ' + templateName);
+            var Logger = require('dw/system/Logger');
+            Logger.error('Error while rendering template ' + curTemplateName);
             throw e;
         }
         return this;
