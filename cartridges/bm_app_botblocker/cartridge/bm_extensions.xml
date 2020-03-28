@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<extensions xmlns="http://www.demandware.com/xml/bmmodules/2007-12-11"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.demandware.com/xml/bmmodules/2007-12-11 bmext.xsd">
+
+	<!-- =============================================================== -->
+	<!-- ==                                                           == -->
+	<!-- ==  ADMINISTRATION MENU EXTENSIONS                           == -->
+	<!-- ==                                                           == -->
+	<!-- =============================================================== -->
+	<!--
+	A custom menu item in the Administration section
+-->
+	<menuitem id="botblocker" position="99999"
+		site="false">
+		<name xml:lang="x-default">Bot Blocker</name>
+		<short_description xml:lang="x-default">This menu item contains tools to monitor Bot Blocker</short_description>
+		<description xml:lang="x-default">This menu item contains tools to monitor Bot Blocker</description>
+		<icon>icons/star_big.gif</icon>
+	</menuitem>
+
+	<menuaction id="botblocker_ipmonitor" menupath="botblocker"
+		position="100" site="false">
+		<name xml:lang="x-default">IP monitor</name>
+		<short_description xml:lang="x-default">This page allows you to view active IP's on the site and past visits.</short_description>
+		<description xml:lang="x-default">This page allows you to view active IP's on the site and past visits.</description>
+		<!-- no icon specified -->
+		<exec pipeline="BB" node="Start" />
+		<sub-pipelines>
+			<pipeline name="BB-Start" />
+		</sub-pipelines>
+		<parameters>
+			<parameter name="menuname" value="IP Monitor" />
+			<parameter name="mainmenuname" value="Bot Blocker" />
+		</parameters>
+		<icon>icons/star_big.gif</icon>
+	</menuaction>
+</extensions>

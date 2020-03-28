@@ -1,0 +1,11 @@
+<isdecorate template="application/MenuFrame">
+<iscontent type="text/html" charset="UTF-8">
+<isinclude template="inc/Modules">
+
+<isset name="TOP_URL"   value="${URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', pdict.CurrentHttpParameterMap.CurrentMenuItemId)}" scope="PAGE">
+<ISBreadcrumb name1="${pdict.CurrentHttpParameterMap.mainmenuname.stringValue}" url1="${TOP_URL.toString()}" name2="Browse Remote - Http">
+<hr/>
+
+<h1 class="overview_title">IP Monitor</h1>
+
+</isdecorate>
