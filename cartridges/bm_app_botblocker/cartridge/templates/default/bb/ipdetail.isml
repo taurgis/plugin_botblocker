@@ -18,7 +18,7 @@
                                     <isif condition="${!pdict.oIPDetail.blacklistStatus}">
                                         Not blacklisted
                                     <iselse/>
-                                        ${pdict.IPBlackListStatus}
+                                        Blacklisted
                                     </isif>
                                 </div>
                                 <div class="col-5">
