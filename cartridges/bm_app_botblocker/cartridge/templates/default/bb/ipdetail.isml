@@ -2,8 +2,26 @@
 <isdecorate template="page/page.isml">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
-                <h1 class="overview_title h2 my-2 pb-3">${pdict.IPAddress.custom.IP}</h1>
+            <div class="col-12 px-0">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h2 class="display-6">${pdict.IPAddress.custom.IP}</h1>
+                        <p class="lead">
+                            <div class="row">
+                                <div class="col-4">
+                                    <b>IP Address:</b> ${pdict.IPAddress.custom.IP} <br />
+                                    <b>Session page count:</b> <isprint value="${pdict.IPAddress.custom.count}" style="INTEGER"><br />
+                                    <b>Session age:</b> <isprint value="${pdict.IPAddress.custom.age}" style="INTEGER"> <br />
+                                </div>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 py-4">
+                <h2>Visited pages</h2>
             </div>
         </div>
         <div class="row">
