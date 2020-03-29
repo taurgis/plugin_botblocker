@@ -25,14 +25,15 @@ function start() {
 function detail() {
     var IPMgr = require('*/cartridge/scripts/managers/IPMgr');
     var IPBlackListMgr = require('*/cartridge/scripts/managers/IPBlacklistMgr');
+    var UserAgent = require('*/cartridge/scripts/model/useragent');
+    var IPDetail = require('../scripts/model/IPDetail');
+
     var dIPAddress = IPMgr.getIPAddress(request.httpParameterMap.ip.stringValue);
     var dIPBlacklist = IPBlackListMgr.getIPAddress(request.httpParameterMap.ip.stringValue);
-    var IPAddressUserAgent = JSON.parse(dIPAddress.custom.userAgent).source;
-    var UserAgent = require('*/cartridge/scripts/botblocker/useragent');
-    var ipAddressUserAgent = new UserAgent(IPAddressUserAgent);
-    ipAddressUserAgent.parse();
+    var sUserAgent = JSON.parse(dIPAddress.custom.userAgent).source;
 
-    var IPDetail = require('../scripts/model/IPDetail');
+    var ipAddressUserAgent = new UserAgent(sUserAgent);
+    ipAddressUserAgent.parse();
 
     app.getView({
         oIPDetail: new IPDetail(dIPAddress, dIPBlacklist, ipAddressUserAgent)

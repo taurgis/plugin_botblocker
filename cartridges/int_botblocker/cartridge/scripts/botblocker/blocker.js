@@ -4,7 +4,7 @@ var CacheMgr = require('dw/system/CacheMgr');
 var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
 var BBRequest = require('~/cartridge/scripts/model/request');
 var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
-var UserAgent = require('./useragent');
+var UserAgent = require('../model/useragent');
 var getPreference = require('../util/getPreference');
 
 /**
@@ -127,6 +127,7 @@ function validate() {
         var oIPAddress = constructIPAddress(sIPAddress, oUserAgent);
 
         if (determineIfIPBlacklisted(oIPAddress)) {
+            bbLogger.log('Blocked blacklisted IP:' + sIPAddress, 'error', 'Blocker~validate');
             return false;
         }
 

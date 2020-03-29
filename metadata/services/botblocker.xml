@@ -21,4 +21,15 @@
         <credential-id/>
     </service>
 
+    <service service-id="BotBlocker.IPInformationService">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>botblockerip</log-prefix>
+        <comm-log-enabled>true</comm-log-enabled>
+        <force-prd-enabled>false</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>BotBlocker</profile-id>
+        <credential-id/>
+    </service>
+
 </services>

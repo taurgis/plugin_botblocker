@@ -29,7 +29,6 @@ function validate() {
             }
         }
 
-
         bbLogger.log('Time to process request in MS: ' + (new Date().getTime() - startTime), 'debug', 'BotBlockerRequestFilter~validate');
     }
 

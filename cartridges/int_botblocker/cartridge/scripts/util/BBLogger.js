@@ -22,13 +22,13 @@ function log(message, severityLevel, logLocation) {
 
     switch (severityLevel) {
         case 'debug':
-            Logger.getLogger(loggerClass).debug(logLocation + ' : ' + message);
+            Logger.getLogger('botblocker', loggerClass).debug(logLocation + ' : ' + message);
             break;
         case 'info':
-            Logger.getLogger(loggerClass).info(logLocation + ' : ' + message);
+            Logger.getLogger('botblocker', loggerClass).info(logLocation + ' : ' + message);
             break;
         case 'error':
-            Logger.getLogger(loggerClass).error(logLocation + ' : ' + message);
+            Logger.getLogger('botblocker', loggerClass).error(logLocation + ' : ' + message);
             break;
         default: // default case to fix eslint error
     }
