@@ -1,0 +1,43 @@
+<isinclude template="inc/Modules" />
+<isdecorate template="page/page.isml">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="overview_title h2 my-2 pb-3">${pdict.IPAddress.custom.IP}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table data-classes="table table-striped"
+                    data-pagination="true"
+                    data-toggle="table"
+                    data-detail-view="true"
+                    data-detail-formatter="detailFormatter"
+                    data-sort-name="time"
+                    data-sort-order="desc"
+                >
+                    <thead>
+                        <tr>
+                            <th scope="col" data-width="50" data-width-unit="%" data-formatter="urlFormatter">Page</th>
+                            <th scope="col" data-field="time" data-sortable="true">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <isloop iterator="${pdict.IPAddress.custom.pageHistory}" alias="historyItem">
+                            <tr>
+                                <td>
+                                    <isprint value="${historyItem.split('|')[0]}"/>
+                                </td>
+                                <td >
+                                    <isprint value="${new Date(Number(historyItem.split('|')[1]))}" style="DATE_SHORT"/>
+                                    <isprint value="${new Date(Number(historyItem.split('|')[1]))}" style="DATE_TIME"/>
+                                </td>
+
+                            </tr>
+                        </isloop>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</isdecorate>

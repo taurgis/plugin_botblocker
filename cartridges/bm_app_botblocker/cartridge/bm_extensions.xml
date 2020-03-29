@@ -28,6 +28,7 @@
 		<exec pipeline="BB" node="Start" />
 		<sub-pipelines>
 			<pipeline name="BB-Start" />
+			<pipeline name="BB-Detail" />
 		</sub-pipelines>
 		<parameters>
 			<parameter name="menuname" value="IP Monitor" />

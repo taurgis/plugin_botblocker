@@ -16,7 +16,9 @@
         <div class="container-fluid">
             <header class="row">
                 <div class="col-3">
-                    <img class="p-4" height="90" src="${URLUtils.staticURL('/icons/forward.png')}" />
+                    <a href="${URLUtils.url('BB-Start')}">
+                        <img class="p-4" height="90" src="${URLUtils.staticURL('/icons/forward.png')}" />
+                    </a>
                 </div>
                 <div class="col-9">
                     <ul class="nav justify-content-end h1 h-100">

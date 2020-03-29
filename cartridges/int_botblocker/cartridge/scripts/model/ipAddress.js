@@ -9,11 +9,13 @@ var getPreference = require('../util/getPreference');
  * @param {string} ip - The IP Address
  * @param {integer} count - The number of requests made
  * @param {long} age - The date of the first recorded request
+ * @param {string} page - The page visited
  */
-function IpAddress(ip, count, age) {
+function IpAddress(ip, count, age, page) {
     this.ip = ip;
     this.age = age || new Date().getTime();
     this.count = count;
+    this.page = page;
 
     if ((age !== null) && this.isExpired()) {
         bbLogger.log('IP ' + this.ip + ' expired.', 'debug', 'IPAddress~expireIfNecessary');

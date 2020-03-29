@@ -22,7 +22,7 @@
                         <isloop iterator="${pdict.IPItems}" alias="IPItem">
                             <tr>
                                 <th scope="row">
-                                    ${IPItem.custom.IP}
+                                    <a href="${URLUtils.url('BB-Detail', 'ip', IPItem.custom.IP)}">${IPItem.custom.IP}</a>
                                 </th>
                                 <td>
                                     <isprint value="${IPItem.custom.count}" style="INTEGER"/> pages

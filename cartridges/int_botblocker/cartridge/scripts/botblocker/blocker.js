@@ -56,9 +56,9 @@ function constructIPAddress(sIPAddress, oUserAgent) {
     var oIPAddress = ipRequestCache.get(sIPAddress);
 
     if (!oIPAddress) {
-        oIPAddress = new IPAddress(sIPAddress, 1);
+        oIPAddress = new IPAddress(sIPAddress, 1, null, request.getHttpURL() + '|' + new Date().getTime());
     } else {
-        oIPAddress = new IPAddress(sIPAddress, oIPAddress.count + 1, oIPAddress.age);
+        oIPAddress = new IPAddress(sIPAddress, oIPAddress.count + 1, oIPAddress.age, request.getHttpURL() + '|' + new Date().getTime());
     }
 
     ipRequestCache.put(sIPAddress, oIPAddress);
@@ -106,8 +106,12 @@ function determineIfIPBlacklisted(oIPAddress) {
  */
 function validate() {
     var errorResponsePipelineMatches = request.getHttpPath().search('Blocker-Challenge');
+    var analyticsPipelineMatches = request.getHttpPath().search('__Analytics-Start');
+    var businessManagerSiteMatches = request.getHttpPath().search('/demandware.store/Sites-Site/');
 
-    if (errorResponsePipelineMatches >= 0) {
+    if (errorResponsePipelineMatches >= 0
+        || analyticsPipelineMatches >= 0
+        || businessManagerSiteMatches >= 0) {
         return true;
     }
 

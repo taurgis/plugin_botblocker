@@ -40,6 +40,16 @@ function saveIPAddress(oIPAddress, oUserAgent) {
             oBotBlockerIP.custom.userAgent = JSON.stringify(oUserAgent || {}, null, 4);
             oBotBlockerIP.custom.count = oIPAddress.count;
             oBotBlockerIP.custom.age = (new Date().getTime() - oIPAddress.age) / 1000;
+
+            var pageHistory = oBotBlockerIP.custom.pageHistory.slice(0);
+
+            if (pageHistory.length >= 300) {
+                pageHistory.shift();
+            }
+
+            pageHistory.push(oIPAddress.page);
+
+            oBotBlockerIP.custom.pageHistory = pageHistory;
         });
     } catch (e) {
         var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
