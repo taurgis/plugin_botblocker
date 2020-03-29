@@ -9,7 +9,7 @@
 function createInformationService(sIPAddress) {
     var ServiceRegistry = require('dw/svc/LocalServiceRegistry');
 
-    return ServiceRegistry.createService('BotBlocker.BlacklistService', {
+    return ServiceRegistry.createService('BotBlocker.IPInformationService', {
         createRequest: function (svc) {
             svc.setURL('http://api.ipstack.com/' + sIPAddress + '?access_key=fc1fed2200de5790a70d7b200772d515&format=1');
             svc.setRequestMethod('GET');
