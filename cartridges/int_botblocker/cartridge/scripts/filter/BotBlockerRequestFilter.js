@@ -13,7 +13,7 @@ var URLUtils = require('dw/web/URLUtils');
  * @returns {Object} ddResponse
  */
 function validate() {
-    if (!request.includeRequest && request.httpRequest) {
+    if (!request.includeRequest && request.httpRequest && !(request.getHttpPath().indexOf('/demandware.store/Sites-Site/') > 0)) {
         var startTime = new Date().getTime();
         var bbLogger = require('../util/BBLogger');
         var botBlocker = require('../botblocker/blocker');

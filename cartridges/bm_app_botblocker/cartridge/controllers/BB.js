@@ -14,7 +14,6 @@ function start() {
     var lastWeek = new Calendar();
     lastWeek.add(Calendar.DAY_OF_YEAR, -7);
 
-
     app.getView({
     	mainmenuname: request.httpParameterMap.mainmenuname.value,
         CurrentMenuItemId: request.httpParameterMap.CurrentMenuItemId.value,

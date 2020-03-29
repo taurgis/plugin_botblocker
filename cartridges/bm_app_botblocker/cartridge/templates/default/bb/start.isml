@@ -1,22 +1,19 @@
 <isinclude template="inc/Modules" />
 <isdecorate template="page/page.isml">
-    <isbreadcrumb name1="${pdict.CurrentHttpParameterMap.mainmenuname.stringValue}" url1="${TOP_URL.toString()}" name2="Browse Remote - Http" />
-    <hr/>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <h1 class="overview_title">IP Monitor</h1>
+                <h1 class="overview_title h2 my-2 pb-3">IP Monitor</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <table data-classes="table table-striped" data-toggle="table">
+                <table data-classes="table table-striped" data-pagination="true" data-toggle="table">
                     <thead>
                         <tr>
-                        <th scope="col" data-sortable="true">IP</th>
-                        <th scope="col" data-width="150" data-width-unit="px">User Agent</th>
-                        <th scope="col" data-sortable="true">Count</th>
-                        <th scope="col" data-sortable="true">Age</th>
+                        <th scope="col" data-width="15" data-width-unit="%" data-sortable="true">IP</th>
+                        <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Count</th>
+                        <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Seconds for count</th>
                         <th scope="col" data-sortable="true">First pageview</th>
                         <th scope="col" data-sortable="true">Last pageview</th>
                         </tr>
@@ -28,15 +25,10 @@
                                     ${IPItem.custom.IP}
                                 </th>
                                 <td>
-                                    <pre>
-                                        ${IPItem.custom.userAgent}
-                                    </pre>
-                                </td>
-                                <td>
-                                    ${IPItem.custom.count}
+                                    <isprint value="${IPItem.custom.count}" style="INTEGER"/> pages
                                 </td>
                                 <td >
-                                    ${IPItem.custom.age}
+                                    <isprint value="${IPItem.custom.age}" style="INTEGER"/> seconds
                                 </td>
                                 <td>
                                     <isprint value="${IPItem.creationDate}" style="DATE_SHORT" timezone="SITE" />
