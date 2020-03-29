@@ -24,13 +24,34 @@ function start() {
  */
 function detail() {
     var IPMgr = require('*/cartridge/scripts/managers/IPMgr');
+    var IPBlackListMgr = require('*/cartridge/scripts/managers/IPBlacklistMgr');
+    var dIPAddress = IPMgr.getIPAddress(request.httpParameterMap.ip.stringValue);
+    var dIPBlacklist = IPBlackListMgr.getIPAddress(request.httpParameterMap.ip.stringValue);
+    var IPAddressUserAgent = JSON.parse(dIPAddress.custom.userAgent).source;
+    var UserAgent = require('*/cartridge/scripts/botblocker/useragent');
+    var ipAddressUserAgent = new UserAgent(IPAddressUserAgent);
+    ipAddressUserAgent.parse();
 
+    var IPDetail = require('../scripts/model/IPDetail');
 
     app.getView({
-        IPAddress: IPMgr.getIPAddress(request.httpParameterMap.ip.stringValue)
+        oIPDetail: new IPDetail(dIPAddress, dIPBlacklist, ipAddressUserAgent)
     }).render('bb/ipdetail');
+}
+
+/**
+ * Renders the detail page of an IP
+ */
+function IPInformation() {
+    var sIPInformationService = require('../scripts/services/ipInformationService').createInformationService(request.httpParameterMap.ip.stringValue);
+    var data = sIPInformationService.call().object;
+
+    app.getView({
+        information: data
+    }).render('bb/ipinformation');
 }
 
 
 exports.Start = guard.ensure(['get', 'https'], start);
 exports.Detail = guard.ensure(['get', 'https'], detail);
+exports.IPInformation = guard.ensure(['get', 'https'], IPInformation);

@@ -29,6 +29,7 @@
 		<sub-pipelines>
 			<pipeline name="BB-Start" />
 			<pipeline name="BB-Detail" />
+            <pipeline name="BB-IPInformation" />
 		</sub-pipelines>
 		<parameters>
 			<parameter name="menuname" value="IP Monitor" />

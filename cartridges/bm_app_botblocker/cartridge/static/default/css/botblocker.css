@@ -5,3 +5,11 @@
 header {
     background-color: #004757;
 }
+
+#ipaddress {
+    border-bottom: 1px solid black;
+}
+
+#ipinformation {
+    min-height: 250px;
+}

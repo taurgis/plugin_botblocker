@@ -3,15 +3,71 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 px-0">
-                <div class="jumbotron jumbotron-fluid">
-                    <div class="container">
-                        <h2 class="display-6">${pdict.IPAddress.custom.IP}</h1>
+                <div class="jumbotron jumbotron-fluid py-4 mb-0">
+                    <div class="container-fluid">
+                        <h2 class="display-6" id="ipaddress"
+                            data-informationservice="${URLUtils.url('BB-IPInformation', 'ip', pdict.oIPDetail.ip)}"
+                        >${pdict.oIPDetail.ip}</h1>
                         <p class="lead">
+                            <div class="row" id="ipinformation">
+                                <div class="col-2">
+                                    <b>IP Address:</b> ${pdict.oIPDetail.ip} <br />
+                                    <b>Session page count:</b> <isprint value="${pdict.oIPDetail.count}" style="INTEGER"><br />
+                                    <b>Session age:</b> <isprint value="${pdict.oIPDetail.age}" style="INTEGER"> <br />
+                                    <b>Status:</b>
+                                    <isif condition="${!pdict.oIPDetail.blacklistStatus}">
+                                        Not blacklisted
+                                    <iselse/>
+                                        ${pdict.IPBlackListStatus}
+                                    </isif>
+                                </div>
+                                <div class="col-5">
+                                    <p>
+                                        <b>User Agent:</b> ${pdict.oIPDetail.userAgent.source}
+                                    </p>
+                                    <isif condition="${pdict.oIPDetail.userAgent.isKnownBot}">
+                                        <p>
+                                            <b>Bot name:</b> ${pdict.oIPDetail.userAgent.bot.name} <br />
+                                            <b>Bot category:</b> ${pdict.oIPDetail.userAgent.bot.category} <br />
+                                            <b>Bot url:</b> ${pdict.oIPDetail.userAgent.bot.url}
+                                        </p>
+                                    </isif>
+
+                                    <isif condition="${pdict.oIPDetail.userAgent.isKnownBrowser}">
+                                        <p>
+                                            <b>Browser name:</b> ${pdict.oIPDetail.userAgent.browser.name} <br />
+                                            <b>Browser version:</b> ${pdict.oIPDetail.userAgent.browser.version} <br />
+                                            <b>Browser engine:</b> ${pdict.oIPDetail.userAgent.browser.engine}
+                                        </p>
+                                    </isif>
+
+                                    <isif condition="${pdict.oIPDetail.userAgent.isKnownLibrary}">
+                                        <p>
+                                            <b>Library name:</b> ${pdict.oIPDetail.userAgent.library.name} <br />
+                                            <b>Library type:</b> ${pdict.oIPDetail.userAgent.library.version} <br />
+                                            <b>Library url:</b> ${pdict.oIPDetail.userAgent.library.url}
+                                        </p>
+                                    </isif>
+
+                                    <isif condition="${pdict.oIPDetail.userAgent.isKnownBrowser || pdict.oIPDetail.userAgent.isKnownLibrary}">
+                                        <p>
+                                            <b>OS name:</b> ${pdict.oIPDetail.userAgent.os.name} <br />
+                                            <b>OS version:</b> ${pdict.oIPDetail.userAgent.os.version}  <br />
+                                            <b>OS platform:</b> ${pdict.oIPDetail.userAgent.os.platform}
+                                        </p>
+                                    </isif>
+                                </div>
+                            </div>
+                        </p>
+                        <p>
                             <div class="row">
-                                <div class="col-4">
-                                    <b>IP Address:</b> ${pdict.IPAddress.custom.IP} <br />
-                                    <b>Session page count:</b> <isprint value="${pdict.IPAddress.custom.count}" style="INTEGER"><br />
-                                    <b>Session age:</b> <isprint value="${pdict.IPAddress.custom.age}" style="INTEGER"> <br />
+                                <div class="col-12">
+                                    <isif condition="${!pdict.oIPDetail.blacklistStatus || pdict.oIPDetail.blacklistStatus === 0}">
+                                        <button type="button" class="btn btn-primary">Blacklist temporarily (30 days)</button>
+                                        <button type="button" class="btn btn-primary">Blacklist</button>
+                                    <iselse/>
+                                        <button type="button" class="btn btn-primary">Whitelist</button>
+                                    </isif>
                                 </div>
                             </div>
                         </p>
@@ -41,7 +97,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <isloop iterator="${pdict.IPAddress.custom.pageHistory}" alias="historyItem">
+                        <isloop iterator="${pdict.oIPDetail.pageHistory}" alias="historyItem">
                             <tr>
                                 <td>
                                     <isprint value="${historyItem.split('|')[0]}"/>
@@ -58,4 +114,5 @@
             </div>
         </div>
     </div>
+    <script src="${URLUtils.staticURL('/js/ipdetail.js')}" defer="defer"></script>
 </isdecorate>
