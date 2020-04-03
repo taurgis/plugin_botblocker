@@ -12,8 +12,9 @@
                     <thead>
                         <tr>
                         <th scope="col" data-width="15" data-width-unit="%" data-sortable="true">IP</th>
-                        <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Count</th>
+                        <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Total pages (session)</th>
                         <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Seconds for count</th>
+                        <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Total pages (Lifetime)</th>
                         <th scope="col" data-sortable="true">First pageview</th>
                         <th scope="col" data-sortable="true">Last pageview</th>
                         </tr>
@@ -25,10 +26,13 @@
                                     <a href="${URLUtils.url('BB-Detail', 'ip', IPItem.custom.IP)}">${IPItem.custom.IP}</a>
                                 </th>
                                 <td>
-                                    <isprint value="${IPItem.custom.count}" style="INTEGER"/> pages
+                                    <isprint value="${IPItem.custom.count}" style="INTEGER"/>
                                 </td>
                                 <td >
                                     <isprint value="${IPItem.custom.age}" style="INTEGER"/> seconds
+                                </td>
+                                <td >
+                                    <isprint value="${IPItem.custom.pageHistory.length}" style="INTEGER"/>
                                 </td>
                                 <td>
                                     <isprint value="${IPItem.creationDate}" style="DATE_SHORT" timezone="SITE" />
