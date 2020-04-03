@@ -5,6 +5,5 @@ $(document).ready(function () {
 
 });
 
-require('./thirdParty/bootstrap');
 require('@popperjs/core');
 require('bootstrap-table');
