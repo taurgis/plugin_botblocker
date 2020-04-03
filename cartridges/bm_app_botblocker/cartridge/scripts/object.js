@@ -19,6 +19,7 @@ exports.extend = function (target, source) {
         return source;
     }
 
+    // eslint-disable-next-line no-plusplus
     for (var i = 1; i < arguments.length; i++) {
         adaptedSource = arguments[i];
         // eslint-disable-next-line no-restricted-syntax

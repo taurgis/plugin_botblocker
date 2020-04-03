@@ -79,7 +79,7 @@ Meta.prototype = {
             this.updatePageMetaData();
 
             // Update breadcrumbs for content
-            if (curObject.class === dw.content.Content) {
+            if (curObject.class === require('dw/content/Content')) {
                 var path = require('~/cartridge/scripts/models/ContentModel').get(curObject).getFolderPath();
                 this.data.breadcrumbs = path.map(function (folder) {
                     return {
