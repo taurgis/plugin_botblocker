@@ -43,7 +43,7 @@ function saveIPAddress(oIPAddress, oUserAgent) {
 
             var pageHistory = oBotBlockerIP.custom.pageHistory.slice(0);
 
-            if (pageHistory.length >= 300) {
+            if (pageHistory.length >= 200) {
                 pageHistory.shift();
             }
 
@@ -69,7 +69,7 @@ function saveIPAddress(oIPAddress, oUserAgent) {
  * @returns {Iterable<Object>} - The items between the start and end date
  */
 function getAllBetweenDates(startDate, endDate) {
-    var result = CustomObjectMgr.queryCustomObjects('BotBlocker_IP', 'creationDate  >= {0} AND creationDate  <= {1}', 'lastModified desc', startDate, endDate);
+    var result = CustomObjectMgr.queryCustomObjects('BotBlocker_IP', 'lastModified  >= {0} AND lastModified  <= {1}', 'lastModified desc', startDate, endDate);
 
     if (result && result.count > 0) {
         return result;
