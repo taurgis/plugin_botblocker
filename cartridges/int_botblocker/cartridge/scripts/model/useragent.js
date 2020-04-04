@@ -1,7 +1,7 @@
 'use strict';
 
 var CacheMgr = require('dw/system/CacheMgr');
-var bbLogger = require('../util/BBLogger.js');
+var bbLogger = require('../util/BBLogger');
 var cUACache = CacheMgr.getCache('bbUserAgent');
 var userAgentParser = require('../util/regexParser').userAgentParser;
 var OperatingSystem = require('./os');
@@ -81,13 +81,15 @@ UserAgent.prototype.determineBrowser = function () {
  */
 UserAgent.prototype.determineBotData = function () {
     var bots = require('./regex/bots.json');
+    var sSource = this.source;
+    var resultBot;
 
     bots.some(function (bot) {
-        var match = userAgentParser(bot.regex, this.source);
+        var match = userAgentParser(bot.regex, sSource);
 
         if (!match) { return false; }
 
-        this.bot = {
+        resultBot = {
             name: bot.name,
             category: bot.category || '',
             url: bot.url || '',
@@ -100,6 +102,10 @@ UserAgent.prototype.determineBotData = function () {
 
         return true;
     });
+
+    if (resultBot) {
+        this.bot = resultBot;
+    }
 
     this.isKnownBot = !!this.bot;
 };

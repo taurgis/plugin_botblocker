@@ -80,8 +80,8 @@ Browser.prototype.parse = function () {
         if (!match) return false;
 
         var vrpVersion = variableReplacement(browser.version, match);
-        var version = formatVersion(vrpVersion);
-        var shortVersion = (version && parseFloat(formatVersion(vrpVersion))) || '';
+        var version = vrpVersion;
+        var shortVersion = (version && parseFloat(vrpVersion)) || '';
 
         if (browser.engine) {
             result.engine = browser.engine.default;

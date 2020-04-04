@@ -5,10 +5,12 @@ module.exports = function (template, variables) {
 
     if (template === null) return '';
 
-    return template.replace(regex, function (match) {
+    var returnTemplate = template.replace(regex, function (match) {
         var index = parseInt(match.substr(1), 10);
         var variable = variables[index - 1];
 
         return variable || '';
     });
+
+    return returnTemplate;
 };
