@@ -81,6 +81,19 @@ describe('useragent', function () {
         assert.equal(result.browser.version, '9.27');
     });
 
+    it('should parse a bot correctly. - Firefox', function () {
+        var sUserAgentString = 'Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, false);
+        assert.equal(result.isKnownBrowser, true);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.browser.name, 'Firefox');
+        assert.equal(result.browser.version, '68.0');
+    });
+
     it('should parse a browser correctly. - Android browser (Android)', function () {
         var sUserAgentString = 'Mozilla/5.0 (Linux; U; Android 4.0.4; ja-jp; F-05E….30 (KHTML, like Gecko) Version/4.0 Safari/534.30';
         var result = new UserAgentModel(sUserAgentString);

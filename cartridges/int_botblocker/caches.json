@@ -13,10 +13,6 @@
             "expireAfterSeconds": 86400
         },
         {
-            "id": "bbRegex",
-            "expireAfterSeconds": 86400
-        },
-        {
             "id": "bbUserAgent",
             "expireAfterSeconds": 86400
         }

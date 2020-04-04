@@ -94,8 +94,8 @@ UserAgent.prototype.determineBotData = function () {
             category: bot.category || '',
             url: bot.url || '',
             producer: {
-                name: bot.producer.name || '',
-                url: bot.producer.url || ''
+                name: (bot.producer && bot.producer.name) || '',
+                url: (bot.producer && bot.producer.url) || ''
             }
         };
 
