@@ -16,7 +16,7 @@ function start() {
 
     app.getView({
         IPItems: IPMgr.getAllBetweenDates(lastWeek.getTime(), now.getTime())
-    }).render('bb/start');
+    }).render('botblocker/start');
 }
 
 /**
@@ -37,22 +37,8 @@ function detail() {
 
     app.getView({
         oIPDetail: new IPDetail(dIPAddress, dIPBlacklist, ipAddressUserAgent)
-    }).render('bb/ipdetail');
+    }).render('botblocker/iplogging/ipdetail');
 }
-
-/**
- * Renders the detail page of an IP
- */
-function IPInformation() {
-    var sIPInformationService = require('../scripts/services/ipInformationService').createInformationService(request.httpParameterMap.ip.stringValue);
-    var data = sIPInformationService.call().object;
-
-    app.getView({
-        information: data
-    }).render('bb/ipinformation');
-}
-
 
 exports.Start = guard.ensure(['get', 'https'], start);
 exports.Detail = guard.ensure(['get', 'https'], detail);
-exports.IPInformation = guard.ensure(['get', 'https'], IPInformation);

@@ -1,7 +1,7 @@
 'use strict';
 
 var CacheMgr = require('dw/system/CacheMgr');
-var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
+var bbLogger = require('../util/BBLogger.js');
 var cUACache = CacheMgr.getCache('bbUserAgent');
 var userAgentParser = require('../util/regexParser').userAgentParser;
 var OperatingSystem = require('./os');

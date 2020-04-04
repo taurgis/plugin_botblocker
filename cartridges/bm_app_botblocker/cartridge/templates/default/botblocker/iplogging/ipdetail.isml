@@ -6,7 +6,7 @@
                 <div class="jumbotron jumbotron-fluid py-4 mb-0">
                     <div class="container-fluid">
                         <h2 class="display-6" id="ipaddress"
-                            data-informationservice="${URLUtils.url('BB-IPInformation', 'ip', pdict.oIPDetail.ip)}"
+                            data-informationservice="${URLUtils.url('BBServices-IPInformation', 'ip', pdict.oIPDetail.ip)}"
                         >${pdict.oIPDetail.ip}</h1>
                         <p class="lead">
                             <div class="row" id="ipinformation">
