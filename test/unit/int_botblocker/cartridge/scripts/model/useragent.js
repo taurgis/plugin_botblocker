@@ -106,4 +106,96 @@ describe('useragent', function () {
         assert.equal(result.bot.name, 'Screaming Frog SEO Spider');
         assert.equal(result.bot.category, 'Crawler');
     });
+
+    it('should parse a bot correctly. - Outbrain', function () {
+        var sUserAgentString = 'Mozilla/5.0 (Java) outbrain';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, true);
+        assert.equal(result.isKnownBrowser, false);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.bot.name, 'Outbrain');
+        assert.equal(result.bot.category, 'Crawler');
+    });
+
+    it('should parse a bot correctly. - Archive.org', function () {
+        var sUserAgentString = 'Mozilla/5.0 (compatible; archive.org_bot; Wayback …ord; +http://archive.org/details/archive.org_bot)';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, true);
+        assert.equal(result.isKnownBrowser, false);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.bot.name, 'archive.org bot');
+        assert.equal(result.bot.category, 'Crawler');
+    });
+
+    it('should parse a bot correctly. - Google (Mobile)', function () {
+        var sUserAgentString = 'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z‡ Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, true);
+        assert.equal(result.isKnownBrowser, false);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.bot.name, 'Googlebot');
+        assert.equal(result.bot.category, 'Search bot');
+    });
+
+    it('should parse a bot correctly. - Google Desktop', function () {
+        var sUserAgentString = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, true);
+        assert.equal(result.isKnownBrowser, false);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.bot.name, 'Googlebot');
+        assert.equal(result.bot.category, 'Search bot');
+    });
+
+    it('should parse a bot correctly. - Bing', function () {
+        var sUserAgentString = 'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Mobile Safari/537.36 Edg/W.X.Y.Z (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, true);
+        assert.equal(result.isKnownBrowser, false);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.bot.name, 'BingBot');
+        assert.equal(result.bot.category, 'Search bot');
+    });
+
+    it('should parse a bot correctly. - Yahoo', function () {
+        var sUserAgentString = 'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, true);
+        assert.equal(result.isKnownBrowser, false);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.bot.name, 'Yahoo! Slurp');
+        assert.equal(result.bot.category, 'Search bot');
+    });
+
+    it('should parse a bot correctly. - Duck Duck Go', function () {
+        var sUserAgentString = 'DuckDuckBot/1.0; (+http://duckduckgo.com/duckduckbot.html)';
+        var result = new UserAgentModel(sUserAgentString);
+        result.parse();
+
+        assert.equal(result.source, sUserAgentString);
+        assert.equal(result.isKnownBot, true);
+        assert.equal(result.isKnownBrowser, false);
+        assert.equal(result.isKnownLibrary, false);
+        assert.equal(result.bot.name, 'DuckDuckGo Bot');
+        assert.equal(result.bot.category, 'Search bot');
+    });
 });
+
