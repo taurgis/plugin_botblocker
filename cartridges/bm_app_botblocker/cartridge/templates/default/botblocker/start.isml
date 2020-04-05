@@ -8,7 +8,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <table data-classes="table table-striped" data-pagination="true" data-toggle="table">
+                <table data-classes="table table-striped" data-pagination="true" data-toggle="table" data-search="true">
                     <thead>
                         <tr>
                         <th scope="col" data-width="15" data-width-unit="%" data-sortable="true">IP</th>

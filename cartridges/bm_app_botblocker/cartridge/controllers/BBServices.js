@@ -3,6 +3,7 @@
 /* Script Modules */
 var app = require('~/cartridge/scripts/app');
 var guard = require('~/cartridge/scripts/guard');
+var CacheMgr = require('dw/system/CacheMgr');
 
 /**
  * Renders the location information of an IP using an external service.
@@ -32,7 +33,10 @@ function BlackListIP() {
         oUserAgent.parse();
 
         if (oIP) {
+            var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
+
             IPBlackListMgr.saveIPAddress(new IPAddress(oIP.custom.IP, oIP.custom.count, oIP.custom.count), oUserAgent);
+            cBlackListCache.invalidate(sIPAddress);
         }
     }
 }
@@ -53,7 +57,10 @@ function WhiteListIP() {
         oUserAgent.parse();
 
         if (oIP) {
+            var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
+
             IPBlackListMgr.whitelist(new IPAddress(oIP.custom.IP, oIP.custom.count, oIP.custom.count), oUserAgent);
+            cBlackListCache.invalidate(sIPAddress);
         }
     }
 }

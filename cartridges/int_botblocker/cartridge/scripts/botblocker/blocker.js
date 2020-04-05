@@ -112,6 +112,10 @@ function validate() {
     if (errorResponsePipelineMatches >= 0
         || analyticsPipelineMatches >= 0
         || businessManagerSiteMatches >= 0) {
+        if (errorResponsePipelineMatches >= 0) {
+            bbLogger.log('IP ' + JSON.stringify(new BBRequest(request)) + ' loaded blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
+        }
+
         return true;
     }
 
@@ -120,6 +124,8 @@ function validate() {
     var oUserAgent = new UserAgent(oBBRequest.UserAgent);
 
     if (empty(oUserAgent.source)) {
+        bbLogger.log('Blocked IP without useragent:' + sIPAddress, 'error', 'Blocker~validate');
+
         return false;
     }
 
@@ -128,6 +134,7 @@ function validate() {
 
         if (determineIfIPBlacklisted(oIPAddress)) {
             bbLogger.log('Blocked blacklisted IP:' + sIPAddress, 'error', 'Blocker~validate');
+
             return false;
         }
 

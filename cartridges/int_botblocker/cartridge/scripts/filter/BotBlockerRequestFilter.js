@@ -24,7 +24,11 @@ function validate() {
             var getPreference = require('../util/getPreference');
 
             if (!getPreference('disableBlacklisting')) {
+                var BBRequest = require('*/cartridge/scripts/model/request');
                 var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
+
+                bbLogger.log('Redirected IP ' + JSON.stringify(new BBRequest(request)) + ' to blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
+
                 response.redirect(redirectUrl);
             }
         }
