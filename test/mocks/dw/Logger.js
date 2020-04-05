@@ -3,7 +3,10 @@ module.exports = {
         return {
             debug: function () {},
             warn: function () {},
-            error: function () {}
+            error: function (message) {
+                // eslint-disable-next-line no-console
+                console.log(message);
+            }
         };
     }
 };

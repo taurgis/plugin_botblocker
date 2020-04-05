@@ -11,5 +11,13 @@ function loadIPData() {
 }
 
 module.exports = {
+    initClicks: () => {
+        $(document).on('click', '.js-blacklist, .js-whitelist', (event) => {
+            var $button = $(event.target);
+            $.post($button.data('actionurl'), () => {
+                location.reload(true);
+            });
+        });
+    },
     loadIPData: loadIPData
 };

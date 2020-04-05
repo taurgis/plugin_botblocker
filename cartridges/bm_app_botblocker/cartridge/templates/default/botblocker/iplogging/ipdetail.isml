@@ -15,8 +15,10 @@
                                     <b>Session page count:</b> <isprint value="${pdict.oIPDetail.count}" style="INTEGER"><br />
                                     <b>Session age:</b> <isprint value="${pdict.oIPDetail.age}" style="INTEGER"> <br />
                                     <b>Status:</b>
-                                    <isif condition="${!pdict.oIPDetail.blacklistStatus}">
+                                    <isif condition="${pdict.oIPDetail.blacklistStatus === false}">
                                         Not blacklisted
+                                    <iselseif condition="${pdict.oIPDetail.blacklistStatus === 0}" />
+                                        Whitelisted
                                     <iselse/>
                                         Blacklisted
                                     </isif>
@@ -63,10 +65,19 @@
                             <div class="row">
                                 <div class="col-12">
                                     <isif condition="${!pdict.oIPDetail.blacklistStatus || pdict.oIPDetail.blacklistStatus === 0}">
-                                        <button type="button" class="btn btn-primary">Blacklist temporarily (30 days)</button>
-                                        <button type="button" class="btn btn-primary">Blacklist</button>
-                                    <iselse/>
-                                        <button type="button" class="btn btn-primary">Whitelist</button>
+                                        <!-- <button type="button" class="btn btn-primary">Blacklist temporarily (30 days)</button> -->
+                                        <button type="button" class="btn btn-primary js-blacklist"
+                                            data-actionurl="${URLUtils.url('BBServices-BlackListIP', 'ip', pdict.oIPDetail.ip)}"
+                                        >
+                                            Blacklist
+                                        </button>
+                                    </isif>
+                                    <isif condition="${pdict.oIPDetail.blacklistStatus !== 0}">
+                                        <button type="button" class="btn btn-primary js-whitelist"
+                                            data-actionurl="${URLUtils.url('BBServices-WhiteListIP', 'ip', pdict.oIPDetail.ip)}"
+                                        >
+                                            Whitelist
+                                        </button>
                                     </isif>
                                 </div>
                             </div>

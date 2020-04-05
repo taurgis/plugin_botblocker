@@ -30,6 +30,8 @@
 			<pipeline name="BB-Start" />
 			<pipeline name="BB-Detail" />
             <pipeline name="BBServices-IPInformation" />
+            <pipeline name="BBServices-BlackListIP" />
+            <pipeline name="BBServices-WhiteListIP" />
 		</sub-pipelines>
 		<parameters>
 			<parameter name="menuname" value="IP Monitor" />

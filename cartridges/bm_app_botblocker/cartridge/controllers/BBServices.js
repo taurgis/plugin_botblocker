@@ -16,4 +16,48 @@ function IPInformation() {
     }).render('botblocker/iplogging/ipinformation');
 }
 
+/**
+ * Blacklist an IP
+ */
+function BlackListIP() {
+    var sIPAddress = request.httpParameterMap.ip.stringValue;
+
+    if (sIPAddress) {
+        var IPMgr = require('*/cartridge/scripts/managers/IPMgr');
+        var IPBlackListMgr = require('*/cartridge/scripts/managers/IPBlacklistMgr');
+        var IPAddress = require('*/cartridge/scripts/model/ipAddress');
+        var UserAgent = require('*/cartridge/scripts/model/useragent');
+        var oIP = IPMgr.getIPAddress(sIPAddress);
+        var oUserAgent = new UserAgent(JSON.parse(oIP.custom.userAgent).source);
+        oUserAgent.parse();
+
+        if (oIP) {
+            IPBlackListMgr.saveIPAddress(new IPAddress(oIP.custom.IP, oIP.custom.count, oIP.custom.count), oUserAgent);
+        }
+    }
+}
+
+/**
+ * Whitelist an IP address
+ */
+function WhiteListIP() {
+    var sIPAddress = request.httpParameterMap.ip.stringValue;
+
+    if (sIPAddress) {
+        var IPMgr = require('*/cartridge/scripts/managers/IPMgr');
+        var IPBlackListMgr = require('*/cartridge/scripts/managers/IPBlacklistMgr');
+        var IPAddress = require('*/cartridge/scripts/model/ipAddress');
+        var UserAgent = require('*/cartridge/scripts/model/useragent');
+        var oIP = IPMgr.getIPAddress(sIPAddress);
+        var oUserAgent = new UserAgent(JSON.parse(oIP.custom.userAgent).source);
+        oUserAgent.parse();
+
+        if (oIP) {
+            IPBlackListMgr.whitelist(new IPAddress(oIP.custom.IP, oIP.custom.count, oIP.custom.count), oUserAgent);
+        }
+    }
+}
+
 exports.IPInformation = guard.ensure(['get', 'https'], IPInformation);
+exports.BlackListIP = guard.ensure(['post', 'https'], BlackListIP);
+exports.WhiteListIP = guard.ensure(['post', 'https'], WhiteListIP);

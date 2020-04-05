@@ -34,7 +34,7 @@ function saveIPAddress(oIPAddress, oUserAgent) {
 
         Transaction.wrap(function () {
             if (!oBlackListedIP) {
-                oBlackListedIP = CustomObjectMgr.createCustomObject('BotBlocker_Blacklisted', oIPAddress.id);
+                oBlackListedIP = CustomObjectMgr.createCustomObject('BotBlocker_Blacklisted', oIPAddress.ip);
             }
 
             oBlackListedIP.custom.userAgent = JSON.stringify(oUserAgent || {}, null, 4);
@@ -52,7 +52,42 @@ function saveIPAddress(oIPAddress, oUserAgent) {
     return true;
 }
 
+/**
+ * Saves an IP address custom object based on the IP address, or updates it when
+ * it already exists.
+ *
+ * @param {Object} oIPAddress - The IP address object
+ * @param {Object} oUserAgent - The User Agent object (Optional)
+ *
+ * @returns {boolean} - Wether or not the update was successfull
+ */
+function whitelist(oIPAddress, oUserAgent) {
+    try {
+        var oBlackListedIP = getIPAddress(oIPAddress.ip);
+
+        Transaction.wrap(function () {
+            if (!oBlackListedIP) {
+                oBlackListedIP = CustomObjectMgr.createCustomObject('BotBlocker_Blacklisted', oIPAddress.ip);
+
+                oBlackListedIP.custom.userAgent = JSON.stringify(oUserAgent || {}, null, 4);
+                oBlackListedIP.custom.count = oIPAddress.count;
+                oBlackListedIP.custom.age = (new Date().getTime() - oIPAddress.age) / 1000;
+            }
+
+            oBlackListedIP.custom.status = 0;
+        });
+    } catch (e) {
+        var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
+        bbLogger.log('Exception blacklisting IP ' + oIPAddress.ip + '. Exception: ' + e, 'error', 'IPBlacklistMgr~saveIPAddress');
+
+        return false;
+    }
+
+    return true;
+}
+
 module.exports = {
     getIPAddress: getIPAddress,
-    saveIPAddress: saveIPAddress
+    saveIPAddress: saveIPAddress,
+    whitelist: whitelist
 };

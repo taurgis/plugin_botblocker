@@ -141,7 +141,8 @@ UserAgent.prototype.determineLibraryData = function () {
         return true;
     });
 
-    if (!empty(result.name)) {
+
+    if (result.name) {
         this.library = result;
     }
 
