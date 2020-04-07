@@ -50,7 +50,7 @@ function registerThresholds(oIPAddress, sIPAddress, oUserAgent) {
  * @returns {Object} - The IP address object
  */
 function constructIPAddress(sIPAddress, oUserAgent) {
-    var IPAddress = require('../model/ipAddress');
+    var IPAddress = require('../../models/session/ipaddress');
     var ipRequestCache = CacheMgr.getCache('bbIPRequest');
     var oIPAddress = ipRequestCache.get(sIPAddress);
 
