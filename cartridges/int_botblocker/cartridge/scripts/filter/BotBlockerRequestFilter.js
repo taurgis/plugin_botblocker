@@ -21,10 +21,10 @@ function validate() {
         var isValid = botBlocker.validate();
 
         if (!isValid) {
-            var getPreference = require('../util/getPreference');
+            var BBConfig = require('../../models/system/config');
 
-            if (!getPreference('disableBlacklisting')) {
-                var BBRequest = require('*/cartridge/scripts/model/request');
+            if (!BBConfig.disableBlacklisting) {
+                var BBRequest = require('../../models/request');
                 var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
 
                 bbLogger.log('Redirected IP ' + JSON.stringify(new BBRequest(request)) + ' to blacklist page.', 'error', 'BotBlockerRequestFilter~validate');

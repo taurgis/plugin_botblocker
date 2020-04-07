@@ -2,10 +2,6 @@
 
 var CacheMgr = require('dw/system/CacheMgr');
 var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
-var BBRequest = require('~/cartridge/scripts/model/request');
-var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
-var UserAgent = require('../model/useragent');
-var getPreference = require('../util/getPreference');
 
 /**
  * Registers the threshold functions for handeling requests.
@@ -15,8 +11,11 @@ var getPreference = require('../util/getPreference');
  * @param {Object} oUserAgent - The user agent object for the current request
  */
 function registerThresholds(oIPAddress, sIPAddress, oUserAgent) {
-    if (oIPAddress.count > (getPreference('firstBlockThreshold') * 0.75)) {
-        oIPAddress.registerThreshold(getPreference('secondBlockThreshold'), function () {
+    var bbLogger = require('../util/BBLogger');
+    var BBConfig = require('../../models/system/config');
+
+    if (oIPAddress.count > (BBConfig.firstBlockThreshold * 0.75)) {
+        oIPAddress.registerThreshold(BBConfig.secondBlockThreshold, function () {
             bbLogger.log(sIPAddress + ' reached second threshold.', 'error', 'Blocker~validate');
 
             cBlackListCache.put(sIPAddress, true);
@@ -27,7 +26,7 @@ function registerThresholds(oIPAddress, sIPAddress, oUserAgent) {
             return true;
         });
 
-        oIPAddress.registerThreshold(getPreference('firstBlockThreshold'), function () {
+        oIPAddress.registerThreshold(BBConfig.firstBlockThreshold, function () {
             bbLogger.log(sIPAddress + ' reached first threshold.', 'debug', 'Blocker~validate');
 
             oUserAgent.parse();
@@ -75,7 +74,9 @@ function constructIPAddress(sIPAddress, oUserAgent) {
  * @returns {boolean} - Wether or not the IP is blacklisted
  */
 function determineIfIPBlacklisted(oIPAddress) {
+    var bbLogger = require('../util/BBLogger');
     var cachedBlackListStatus = cBlackListCache.get(oIPAddress.ip);
+
     if (cachedBlackListStatus === true) {
         bbLogger.log('Blacklisted ' + oIPAddress.ip + ' redirected.', 'debug', 'Blocker~validate');
         oIPAddress.blacklist();
@@ -105,6 +106,11 @@ function determineIfIPBlacklisted(oIPAddress) {
  * @returns {boolean} If the request is OK
  */
 function validate() {
+    var BBRequest = require('../../models/request');
+    var bbLogger = require('../util/BBLogger');
+    var UserAgent = require('../model/useragent');
+    var oBBRequest = new BBRequest(request);
+
     var errorResponsePipelineMatches = request.getHttpPath().search('Blocker-Challenge');
     var analyticsPipelineMatches = request.getHttpPath().search('__Analytics-Start');
     var businessManagerSiteMatches = request.getHttpPath().search('/demandware.store/Sites-Site/');
@@ -119,8 +125,7 @@ function validate() {
         return true;
     }
 
-    var oBBRequest = new BBRequest(request);
-    var sIPAddress = oBBRequest.TrueClientIP || oBBRequest['X-Real-IP'] || oBBRequest.IP;
+    var sIPAddress = oBBRequest.IP;
     var oUserAgent = new UserAgent(oBBRequest.UserAgent);
 
     if (empty(oUserAgent.source)) {

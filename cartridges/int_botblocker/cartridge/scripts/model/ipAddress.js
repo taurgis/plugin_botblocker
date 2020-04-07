@@ -1,8 +1,5 @@
 'use strict';
 
-var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
-var getPreference = require('../util/getPreference');
-
 /**
  * The IpAddress object to manage information related to the IP.
  * @constructor
@@ -18,6 +15,8 @@ function IpAddress(ip, count, age, page) {
     this.page = page;
 
     if ((age !== null) && this.isExpired()) {
+        var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
+
         bbLogger.log('IP ' + this.ip + ' expired.', 'debug', 'IPAddress~expireIfNecessary');
         this.count = 1;
         this.age = new Date().getTime();
@@ -60,10 +59,12 @@ IpAddress.prototype.checkThresholds = function () {
  * @returns {boolean} - Wether or not the IP address has expired
  */
 IpAddress.prototype.isExpired = function () {
+    var BBConfig = require('../../models/system/config');
+
     var curTime = new Date().getTime();
     var secondsSinceFirstRequest = (curTime - this.age) / 1000;
 
-    return secondsSinceFirstRequest > getPreference('ipTTL');
+    return secondsSinceFirstRequest > BBConfig.ipTTL;
 };
 
 IpAddress.prototype.blacklist = function (oUserAgent) {
@@ -72,7 +73,9 @@ IpAddress.prototype.blacklist = function (oUserAgent) {
 };
 
 IpAddress.prototype.save = function (oUserAgent) {
-    if (getPreference('enableIPCustomObject')) {
+    var BBConfig = require('../../models/system/config');
+
+    if (BBConfig.enableIPCustomObject) {
         var IPMgr = require('../managers/IPMgr');
         IPMgr.saveIPAddress(this, oUserAgent);
     }
