@@ -16,7 +16,8 @@ function Config() {
     this.enabled = getPreference('BB_Enabled');
     this.filteredUrls = [
         'Blocker-Challenge',
-        '__Analytics-Start',
+        '/challenge',
+        '/__',
         '/demandware.store/Sites-Site/'
     ];
 
