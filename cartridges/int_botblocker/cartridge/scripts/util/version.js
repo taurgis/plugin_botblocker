@@ -1,10 +1,10 @@
 'use strict';
 
-var trim = require('./trim');
-
 module.exports = {
     formatVersion: function (version, versionTruncation) {
         if (version === undefined) return '';
+
+        var trim = require('./trim');
 
         var versionString = trim(version, '. ').replace(new RegExp('_', 'g'), '.');
         var versionParts = versionString.split('.');

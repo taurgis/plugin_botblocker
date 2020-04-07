@@ -3,7 +3,6 @@
 'use strict';
 
 var userAgentParser = require('../util/regexParser').userAgentParser;
-var variableReplacement = require('../util/variableReplacement');
 var formatVersion = require('../util/version').formatVersion;
 
 /**
@@ -29,6 +28,7 @@ OS.prototype.parse = function () {
 
         if (!match) return false;
 
+        var variableReplacement = require('../util/variableReplacement');
         result.name = variableReplacement(operatingSystem.name, match);
         result.version = formatVersion(variableReplacement(operatingSystem.version, match));
 

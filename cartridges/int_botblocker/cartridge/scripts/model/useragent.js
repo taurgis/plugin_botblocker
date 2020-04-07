@@ -1,11 +1,8 @@
 'use strict';
 
 var CacheMgr = require('dw/system/CacheMgr');
-var bbLogger = require('../util/BBLogger');
 var cUACache = CacheMgr.getCache('bbUserAgent');
 var userAgentParser = require('../util/regexParser').userAgentParser;
-var OperatingSystem = require('./os');
-var Browser = require('./browser');
 
 /**
  * The User Agent processing class
@@ -29,9 +26,9 @@ function UserAgent(sUserAgent) {
 UserAgent.prototype.parse = function () {
     if (this.source) {
         var cachedParseResult = cUACache.get(this.source);
-
+        var Logger = require('../util/BBLogger');
         if (cachedParseResult) {
-            bbLogger.log('Fetching UserAgent from cache.', 'debug', 'UserAgent~parse');
+            Logger.log('Fetching UserAgent from cache.', 'debug', 'UserAgent~parse');
             this.bot = cachedParseResult.bot;
             this.isKnownBot = cachedParseResult.isKnownBot;
             this.os = cachedParseResult.os;
@@ -58,17 +55,19 @@ UserAgent.prototype.parse = function () {
             }
 
             cUACache.put(this.source, this);
-            bbLogger.log('UserAgent calculated and cached.', 'debug', 'UserAgent~parse');
+            Logger.log('UserAgent calculated and cached.', 'debug', 'UserAgent~parse');
         }
     }
 };
 
 UserAgent.prototype.determineOS = function () {
+    var OperatingSystem = require('./os');
     var oOperatingSystem = new OperatingSystem(this.source);
     this.os = oOperatingSystem.parse();
 };
 
 UserAgent.prototype.determineBrowser = function () {
+    var Browser = require('./browser');
     var oBrowser = new Browser(this.source);
     this.browser = oBrowser.parse();
     this.isKnownBrowser = !!this.browser.name;
@@ -129,7 +128,7 @@ UserAgent.prototype.determineLibraryData = function () {
     };
 
     libraries.some(function (library) {
-        const match = userAgentParser(library.regex, sUserAgent);
+        var match = userAgentParser(library.regex, sUserAgent);
 
         if (!match) return false;
 
