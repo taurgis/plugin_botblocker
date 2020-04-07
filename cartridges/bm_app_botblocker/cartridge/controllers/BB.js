@@ -25,7 +25,7 @@ function start() {
 function detail() {
     var IPMgr = require('*/cartridge/scripts/managers/IPMgr');
     var IPBlackListMgr = require('*/cartridge/scripts/managers/IPBlacklistMgr');
-    var UserAgent = require('*/cartridge/scripts/model/useragent');
+    var UserAgent = require('*/cartridge/models/session/useragent');
     var IPDetail = require('../scripts/model/IPDetail');
 
     var dIPAddress = IPMgr.getIPAddress(request.httpParameterMap.ip.stringValue);

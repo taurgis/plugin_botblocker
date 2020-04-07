@@ -2,8 +2,8 @@
 
 'use strict';
 
-var userAgentParser = require('../util/regexParser').userAgentParser;
-var formatVersion = require('../util/version').formatVersion;
+var userAgentParser = require('../../scripts/util/regexParser').userAgentParser;
+var formatVersion = require('../../scripts/util/version').formatVersion;
 
 /**
  * Class to determine the OS used by the client.
@@ -28,7 +28,7 @@ OS.prototype.parse = function () {
 
         if (!match) return false;
 
-        var variableReplacement = require('../util/variableReplacement');
+        var variableReplacement = require('../../scripts/util/variableReplacement');
         result.name = variableReplacement(operatingSystem.name, match);
         result.version = formatVersion(variableReplacement(operatingSystem.version, match));
 

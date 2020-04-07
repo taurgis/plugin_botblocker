@@ -27,7 +27,7 @@ function BlackListIP() {
         var IPMgr = require('*/cartridge/scripts/managers/IPMgr');
         var IPBlackListMgr = require('*/cartridge/scripts/managers/IPBlacklistMgr');
         var IPAddress = require('*/cartridge/models/session/ipaddress');
-        var UserAgent = require('*/cartridge/scripts/model/useragent');
+        var UserAgent = require('*/cartridge/models/session/useragent');
         var oIP = IPMgr.getIPAddress(sIPAddress);
         var oUserAgent = new UserAgent(JSON.parse(oIP.custom.userAgent).source);
         oUserAgent.parse();
@@ -51,7 +51,7 @@ function WhiteListIP() {
         var IPMgr = require('*/cartridge/scripts/managers/IPMgr');
         var IPBlackListMgr = require('*/cartridge/scripts/managers/IPBlacklistMgr');
         var IPAddress = require('*/cartridge/models/session/ipaddress');
-        var UserAgent = require('*/cartridge/scripts/model/useragent');
+        var UserAgent = require('*/cartridge/models/session/useragent');
         var oIP = IPMgr.getIPAddress(sIPAddress);
         var oUserAgent = new UserAgent(JSON.parse(oIP.custom.userAgent).source);
         oUserAgent.parse();

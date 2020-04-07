@@ -1,8 +1,8 @@
 'use strict';
 
-var userAgentParser = require('../util/regexParser').userAgentParser;
-var formatVersion = require('../util/version').formatVersion;
-var parseBrowserEngineVersion = require('../util/version').parseBrowserEngineVersion;
+var userAgentParser = require('../../scripts/util/regexParser').userAgentParser;
+var formatVersion = require('../../scripts/util/version').formatVersion;
+var parseBrowserEngineVersion = require('../../scripts/util/version').parseBrowserEngineVersion;
 
 /**
  * Class to determine the browser used by the client.
@@ -29,7 +29,7 @@ Browser.prototype.parse = function () {
 
         if (!match) return false;
 
-        var variableReplacement = require('../util/variableReplacement');
+        var variableReplacement = require('../../scripts/util/variableReplacement');
         var vrpVersion = variableReplacement(browser.version, match);
         var version = vrpVersion;
         var shortVersion = (version && parseFloat(vrpVersion)) || '';

@@ -2,7 +2,7 @@
 
 var CacheMgr = require('dw/system/CacheMgr');
 var cUACache = CacheMgr.getCache('bbUserAgent');
-var userAgentParser = require('../util/regexParser').userAgentParser;
+var userAgentParser = require('../../scripts/util/regexParser').userAgentParser;
 
 /**
  * The User Agent processing class
@@ -26,7 +26,7 @@ function UserAgent(sUserAgent) {
 UserAgent.prototype.parse = function () {
     if (this.source) {
         var cachedParseResult = cUACache.get(this.source);
-        var Logger = require('../util/BBLogger');
+        var Logger = require('../../scripts/util/BBLogger');
         if (cachedParseResult) {
             Logger.log('Fetching UserAgent from cache.', 'debug', 'UserAgent~parse');
             this.bot = cachedParseResult.bot;
@@ -63,6 +63,7 @@ UserAgent.prototype.parse = function () {
 UserAgent.prototype.determineOS = function () {
     var OperatingSystem = require('./os');
     var oOperatingSystem = new OperatingSystem(this.source);
+
     this.os = oOperatingSystem.parse();
 };
 
@@ -116,8 +117,8 @@ UserAgent.prototype.determineBotData = function () {
  */
 UserAgent.prototype.determineLibraryData = function () {
     var libraries = require('./regex/libraries.json');
-    var variableReplacement = require('../util/variableReplacement');
-    var formatVersion = require('../util/version').formatVersion;
+    var variableReplacement = require('../../scripts/util/variableReplacement');
+    var formatVersion = require('../../scripts/util/version').formatVersion;
     var sUserAgent = this.source;
 
     var result = {

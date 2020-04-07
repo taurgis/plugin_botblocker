@@ -108,7 +108,7 @@ function determineIfIPBlacklisted(oIPAddress) {
 function validate() {
     var BBRequest = require('../../models/request');
     var bbLogger = require('../util/BBLogger');
-    var UserAgent = require('../model/useragent');
+    var UserAgent = require('../../models/session/useragent');
     var oBBRequest = new BBRequest(request);
 
     var errorResponsePipelineMatches = request.getHttpPath().search('Blocker-Challenge');

@@ -4,21 +4,21 @@ var assert = require('chai').assert;
 var proxyquire = require('proxyquire').noCallThru().noPreserveCache();
 
 describe('useragent', function () {
-    var UserAgentModel = proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/model/useragent', {
+    var UserAgentModel = proxyquire('../../../../../../cartridges/int_botblocker/cartridge/models/session/useragent', {
         'dw/system/CacheMgr': require('../../../../../mocks/dw/CacheMgr'),
-        '../util/BBLogger': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/BBLogger', {
+        '../../scripts/util/BBLogger': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/BBLogger', {
             'dw/system/Logger': require('../../../../../mocks/dw/Logger')
         }),
-        '../util/regexParser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/regexParser', {
+        '../../scripts/util/regexParser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/regexParser', {
             'dw/system/CacheMgr': require('../../../../../mocks/dw/CacheMgr')
         }),
-        './browser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/model/browser', {
-            '../util/regexParser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/regexParser', {
+        './browser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/models/session/browser', {
+            '../../scripts/util/regexParser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/regexParser', {
                 'dw/system/CacheMgr': require('../../../../../mocks/dw/CacheMgr')
             })
         }),
-        './os': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/model/os', {
-            '../util/regexParser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/regexParser', {
+        './os': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/models/session/os', {
+            '../../scripts/util/regexParser': proxyquire('../../../../../../cartridges/int_botblocker/cartridge/scripts/util/regexParser', {
                 'dw/system/CacheMgr': require('../../../../../mocks/dw/CacheMgr')
             })
         })
