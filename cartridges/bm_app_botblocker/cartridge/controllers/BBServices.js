@@ -1,7 +1,6 @@
 'use strict';
 
 /* Script Modules */
-var app = require('~/cartridge/scripts/app');
 var guard = require('~/cartridge/scripts/guard');
 var CacheMgr = require('dw/system/CacheMgr');
 
@@ -9,6 +8,7 @@ var CacheMgr = require('dw/system/CacheMgr');
  * Renders the location information of an IP using an external service.
  */
 function IPInformation() {
+    var app = require('~/cartridge/scripts/app');
     var sIPInformationService = require('../scripts/services/ipInformationService').createInformationService(request.httpParameterMap.ip.stringValue);
     var data = sIPInformationService.call().object;
 
