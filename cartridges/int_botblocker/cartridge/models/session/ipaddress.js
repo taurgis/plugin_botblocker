@@ -23,12 +23,12 @@ function IpAddress(ip, count, age, page) {
     }
 }
 
-IpAddress.prototype.registerThreshold = function (amount, fCallbackFunction) {
+IpAddress.prototype.registerThreshold = function (iAmount, fCallbackFunction) {
     if (!this.thresholds) {
         this.thresholds = {};
     }
 
-    this.thresholds[amount] = fCallbackFunction;
+    this.thresholds[iAmount] = fCallbackFunction;
 };
 
 IpAddress.prototype.checkThresholds = function () {
@@ -62,9 +62,9 @@ IpAddress.prototype.isExpired = function () {
     var BBConfig = require('../system/config');
 
     var curTime = new Date().getTime();
-    var secondsSinceFirstRequest = (curTime - this.age) / 1000;
+    var iSecondsPassed = (curTime - this.age) / 1000;
 
-    return secondsSinceFirstRequest > BBConfig.ipTTL;
+    return iSecondsPassed > BBConfig.thresholdTTL;
 };
 
 IpAddress.prototype.blacklist = function (oUserAgent) {
@@ -75,7 +75,7 @@ IpAddress.prototype.blacklist = function (oUserAgent) {
 IpAddress.prototype.save = function (oUserAgent) {
     var BBConfig = require('../system/config');
 
-    if (BBConfig.enableIPCustomObject) {
+    if (BBConfig.enableIPMonitoring) {
         var IPMgr = require('../../scripts/managers/IPMgr');
         IPMgr.saveIPAddress(this, oUserAgent);
     }

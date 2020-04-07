@@ -3,7 +3,6 @@
 var Status = require('dw/system/Status');
 var URLUtils = require('dw/web/URLUtils');
 
-
 /**
  * This method will intercept all incoming requests in the storefront and will only validate requests
  * that meets certain criteria. The method will skip remote includes and non HTTP requests.
@@ -13,27 +12,29 @@ var URLUtils = require('dw/web/URLUtils');
  * @returns {Object} ddResponse
  */
 function validate() {
-    if (!request.includeRequest && request.httpRequest) {
-        var startTime = new Date().getTime();
-        var bbLogger = require('../util/BBLogger');
-        var botBlocker = require('../botblocker/blocker');
+    var BBConfig = require('../../models/system/config');
 
-        var isValid = botBlocker.validate();
+    if (BBConfig.enabled) {
+        if (!request.includeRequest && request.httpRequest) {
+            var startTime = new Date().getTime();
+            var bbLogger = require('../util/BBLogger');
+            var botBlocker = require('../botblocker/blocker');
 
-        if (!isValid) {
-            var BBConfig = require('../../models/system/config');
+            var isValid = botBlocker.validate();
 
-            if (!BBConfig.disableBlacklisting) {
-                var BBRequest = require('../../models/request');
-                var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
+            if (!isValid) {
+                if (!BBConfig.disableBlacklisting) {
+                    var BBRequest = require('../../models/request');
+                    var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
 
-                bbLogger.log('Redirected IP ' + JSON.stringify(new BBRequest(request)) + ' to blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
+                    bbLogger.log('Redirected IP ' + JSON.stringify(new BBRequest(request)) + ' to blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
 
-                response.redirect(redirectUrl);
+                    response.redirect(redirectUrl);
+                }
             }
-        }
 
-        bbLogger.log('Time to process request in MS: ' + (new Date().getTime() - startTime), 'debug', 'BotBlockerRequestFilter~validate');
+            bbLogger.log('Time to process request in MS: ' + (new Date().getTime() - startTime), 'debug', 'BotBlockerRequestFilter~validate');
+        }
     }
 
     return new Status(Status.OK);

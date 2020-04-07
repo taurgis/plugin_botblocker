@@ -2,6 +2,7 @@
 
 var CacheMgr = require('dw/system/CacheMgr');
 var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
+var BBConfig = require('../../models/system/config');
 
 /**
  * Registers the threshold functions for handeling requests.
@@ -12,7 +13,6 @@ var cBlackListCache = CacheMgr.getCache('bbBlacklisted');
  */
 function registerThresholds(oIPAddress, sIPAddress, oUserAgent) {
     var bbLogger = require('../util/BBLogger');
-    var BBConfig = require('../../models/system/config');
 
     if (oIPAddress.count > (BBConfig.firstBlockThreshold * 0.75)) {
         oIPAddress.registerThreshold(BBConfig.secondBlockThreshold, function () {
@@ -111,13 +111,13 @@ function validate() {
     var UserAgent = require('../../models/session/useragent');
     var oBBRequest = new BBRequest(request);
 
-    var errorResponsePipelineMatches = request.getHttpPath().search('Blocker-Challenge');
-    var analyticsPipelineMatches = request.getHttpPath().search('__Analytics-Start');
-    var businessManagerSiteMatches = request.getHttpPath().search('/demandware.store/Sites-Site/');
+    var isFiltered = BBConfig.filteredUrls.some(function (sFilteredURL) {
+        return request.getHttpPath().search(sFilteredURL) >= 0;
+    });
 
-    if (errorResponsePipelineMatches >= 0
-        || analyticsPipelineMatches >= 0
-        || businessManagerSiteMatches >= 0) {
+    if (isFiltered) {
+        var errorResponsePipelineMatches = request.getHttpPath().search('Blocker-Challenge');
+
         if (errorResponsePipelineMatches >= 0) {
             bbLogger.log('IP ' + JSON.stringify(new BBRequest(request)) + ' loaded blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
         }
