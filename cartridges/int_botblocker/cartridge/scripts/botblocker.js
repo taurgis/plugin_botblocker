@@ -145,20 +145,18 @@ function validate() {
         return true;
     }
 
-    var sIPAddress = oBBRequest.IP;
-    var oUserAgent = new UserAgent(oBBRequest.UserAgent);
-
-    if (empty(oUserAgent.source)) {
-        Logger.log('Blocked IP without useragent:' + sIPAddress, 'error', 'Blocker~validate');
+    if (empty(oBBRequest.UserAgent)) {
+        Logger.log('Blocked IP without useragent:' + oBBRequest.IP, 'error', 'Blocker~validate');
 
         return false;
     }
 
-    if (sIPAddress != null) {
-        var oIPAddress = constructIPAddress(sIPAddress, oUserAgent);
+    if (oBBRequest.IP != null) {
+        var oUserAgent = new UserAgent(oBBRequest.UserAgent);
+        var oIPAddress = constructIPAddress(oBBRequest.IP, oUserAgent);
 
         if (determineIfIPBlacklisted(oIPAddress)) {
-            Logger.log('Blocked blacklisted IP:' + sIPAddress, 'error', 'Blocker~validate');
+            Logger.log('Blocked blacklisted IP:' + oBBRequest.IP, 'error', 'Blocker~validate');
 
             return false;
         }
