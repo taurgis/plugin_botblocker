@@ -1,10 +1,21 @@
 'use strict';
 
+/**
+ * Trims double characters.
+ * @param {string} str - The string containing the char
+ * @param {string} char - The character to trim
+ *
+ * @returns {string} - The trimmed string
+ */
+function trim(str, char) {
+    return str.replace(new RegExp(
+        '^[' + char + ']+|[' + char + ']+$', 'g'
+    ), '');
+}
+
 module.exports = {
     formatVersion: function (version, versionTruncation) {
         if (version === undefined) return '';
-
-        var trim = require('./trim');
 
         var versionString = trim(version, '. ').replace(new RegExp('_', 'g'), '.');
         var versionParts = versionString.split('.');
