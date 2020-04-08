@@ -26,6 +26,4 @@ function Config() {
     }
 }
 
-
-module.exports = new Config()
-;
+module.exports = new Config();

@@ -17,23 +17,23 @@ function validate() {
     if (BBConfig.enabled) {
         if (!request.includeRequest && request.httpRequest) {
             var startTime = new Date().getTime();
-            var bbLogger = require('../util/BBLogger');
-            var botBlocker = require('../botblocker/blocker');
+            var Logger = require('../util/BBLogger');
+            var blocker = require('../botblocker');
 
-            var isValid = botBlocker.validate();
+            var isValid = blocker.validate();
 
             if (!isValid) {
                 if (!BBConfig.disableBlacklisting) {
                     var BBRequest = require('../../models/request');
                     var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
 
-                    bbLogger.log('Redirected IP ' + JSON.stringify(new BBRequest(request)) + ' to blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
+                    Logger.log('Redirected IP ' + JSON.stringify(new BBRequest(request)) + ' to blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
 
                     response.redirect(redirectUrl);
                 }
             }
 
-            bbLogger.log('Time to process request in MS: ' + (new Date().getTime() - startTime), 'debug', 'BotBlockerRequestFilter~validate');
+            Logger.log('Time to process request in MS: ' + (new Date().getTime() - startTime), 'debug', 'BotBlockerRequestFilter~validate');
         }
     }
 
