@@ -5,15 +5,15 @@
  * loaded here.
  */
 function Config() {
-    var getPreference = require('../../scripts/util/getPreference');
-    var lCustomFilters = getPreference('BB_filtered_urls');
+    var GlobalPreferenceMgr = require('../../scripts/managers/GlobalPreferenceMgr');
+    var lCustomFilters = GlobalPreferenceMgr.getPreference('BB_filtered_urls');
 
-    this.firstBlockThreshold = getPreference('BB_first_threshold');
-    this.secondBlockThreshold = getPreference('BB_second_threshold');
-    this.disableBlacklisting = getPreference('BB_disable_blacklisting');
-    this.thresholdTTL = getPreference('BB_threshold_lifetime');
-    this.enableIPMonitoring = getPreference('BB_enable_ip_monitoring');
-    this.enabled = getPreference('BB_Enabled');
+    this.firstBlockThreshold = GlobalPreferenceMgr.getPreference('BB_first_threshold');
+    this.secondBlockThreshold = GlobalPreferenceMgr.getPreference('BB_second_threshold');
+    this.disableBlacklisting = GlobalPreferenceMgr.getPreference('BB_disable_blacklisting');
+    this.thresholdTTL = GlobalPreferenceMgr.getPreference('BB_threshold_lifetime');
+    this.enableIPMonitoring = GlobalPreferenceMgr.getPreference('BB_enable_ip_monitoring');
+    this.enabled = GlobalPreferenceMgr.getPreference('BB_Enabled');
     this.filteredUrls = [
         'Blocker-Challenge',
         '/challenge',

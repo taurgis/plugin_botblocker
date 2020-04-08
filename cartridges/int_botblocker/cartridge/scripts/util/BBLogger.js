@@ -1,14 +1,5 @@
 'use strict';
 
-/* global require, exports */
-
-/**
- * @module scripts/util/BBLogger
- *
- * This is a common script used for Logging purpose.
- * The log is written based on message type like debug, info or error.
- */
-
 /**
  * This is a custom logger to log messages of all levels.
  *
@@ -22,13 +13,16 @@ function log(message, severityLevel, logLocation) {
 
     switch (severityLevel) {
         case 'debug':
-            Logger.getLogger('botblocker', loggerClass).debug(logLocation + ' : ' + message);
+            Logger.getLogger('botblocker', loggerClass).debug('[Bot Blocker][' + logLocation + '] : ' + message);
             break;
         case 'info':
-            Logger.getLogger('botblocker', loggerClass).info(logLocation + ' : ' + message);
+            Logger.getLogger('botblocker', loggerClass).info('[Bot Blocker][' + logLocation + '] : ' + message);
+            break;
+        case 'warn':
+            Logger.getLogger('botblocker', loggerClass).warn('[Bot Blocker][' + logLocation + '] : ' + message);
             break;
         case 'error':
-            Logger.getLogger('botblocker', loggerClass).error(logLocation + ' : ' + message);
+            Logger.getLogger('botblocker', loggerClass).error('[Bot Blocker][' + logLocation + '] : ' + message);
             break;
         default: // default case to fix eslint error
     }
