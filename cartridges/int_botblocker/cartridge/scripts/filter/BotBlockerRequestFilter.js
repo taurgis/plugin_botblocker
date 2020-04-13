@@ -26,26 +26,12 @@ function validate() {
                 if (!BBConfig.disableBlacklisting) {
                     var IPBlacklistMgr = require('../managers/IPBlacklistMgr');
                     var BBRequest = require('../../models/request');
-                    var redirectUrl = URLUtils.https('Blocker-Challenge').toString();
                     var oBBRequest = new BBRequest(request);
-                    var oBlacklistedIP = IPBlacklistMgr.getIPAddress(oBBRequest.IP);
 
-                    if (oBlacklistedIP) {
-                        var Transaction = require('dw/system/Transaction');
-
-                        Transaction.wrap(function () {
-                            if (oBlacklistedIP.custom.blockedCount) {
-                                oBlacklistedIP.custom.blockedCount += 1;
-                            } else {
-                                oBlacklistedIP.custom.blockedCount = 1;
-                            }
-                        });
-                    }
-
-
+                    IPBlacklistMgr.countBlocked(oBBRequest.IP);
                     Logger.log('Redirected IP ' + JSON.stringify(oBBRequest) + ' to blacklist page.', 'error', 'BotBlockerRequestFilter~validate');
 
-                    response.redirect(redirectUrl);
+                    response.redirect(URLUtils.https('Blocker-Challenge').toString());
                 }
             }
 

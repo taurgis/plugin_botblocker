@@ -87,10 +87,11 @@ function whitelist(oIPAddress, oUserAgent) {
 }
 
 /**
- * Gets
- * @param {Integer} iStatus - The start date
+ * Gets all blacklist items for the given status.
  *
- * @returns {Iterable<Object>} - The items between the start and end date
+ * @param {Integer} iStatus - The status (0 = whitelisted, 1 = blacklisted)
+ *
+ * @returns {Iterable<Object>} - The items with the status
  */
 function getAll(iStatus) {
     var result = CustomObjectMgr.queryCustomObjects('BotBlocker_Blacklisted', 'custom.status = {0}', 'lastModified desc', iStatus);
@@ -103,9 +104,34 @@ function getAll(iStatus) {
     return null;
 }
 
+/**
+ * Adds 1 to the amount of times an IP address has been blocked.
+ *
+ * @param {string} sIPAddress - The IP address
+ */
+function countBlocked(sIPAddress) {
+    var oBlacklistedIP = getIPAddress(sIPAddress);
+
+    if (oBlacklistedIP) {
+        try {
+            Transaction.wrap(function () {
+                if (oBlacklistedIP.custom.blockedCount) {
+                    oBlacklistedIP.custom.blockedCount += 1;
+                } else {
+                    oBlacklistedIP.custom.blockedCount = 1;
+                }
+            });
+        } catch (e) {
+            var bbLogger = require('~/cartridge/scripts/util/BBLogger.js');
+            bbLogger.log('Exception trying to add 1 to the blocked found for ' + sIPAddress + '. Exception: ' + e, 'error', 'IPBlacklistMgr~countBlocked');
+        }
+    }
+}
+
 module.exports = {
     getIPAddress: getIPAddress,
     saveIPAddress: saveIPAddress,
     whitelist: whitelist,
-    getAll: getAll
+    getAll: getAll,
+    countBlocked: countBlocked
 };
