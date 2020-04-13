@@ -91,6 +91,7 @@ function determineIfIPBlacklisted(oIPAddress) {
     if (oBlackListedIP) {
         if (oBlackListedIP.custom.status.value > 0) {
             cBlackListCache.put(oIPAddress.ip, true);
+            oIPAddress.blacklist();
             return true;
         }
     }
@@ -151,7 +152,7 @@ function validate() {
         return false;
     }
 
-    if (oBBRequest.IP != null) {
+    if (oBBRequest.IP) {
         var oUserAgent = new UserAgent(oBBRequest.UserAgent);
         var oIPAddress = constructIPAddress(oBBRequest.IP, oUserAgent);
 

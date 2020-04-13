@@ -1,9 +1,5 @@
 'use strict';
 
-var CacheMgr = require('dw/system/CacheMgr');
-var cUACache = CacheMgr.getCache('bbUserAgent');
-var userAgentParser = require('../../scripts/util/regexParser').userAgentParser;
-
 /**
  * The User Agent processing class
  *
@@ -25,10 +21,11 @@ function UserAgent(sUserAgent) {
  */
 UserAgent.prototype.parse = function () {
     if (this.source) {
+        var CacheMgr = require('dw/system/CacheMgr');
+        var cUACache = CacheMgr.getCache('bbUserAgent');
         var cachedParseResult = cUACache.get(this.source);
-        var Logger = require('../../scripts/util/BBLogger');
+
         if (cachedParseResult) {
-            Logger.log('Fetching UserAgent from cache.', 'debug', 'UserAgent~parse');
             this.bot = cachedParseResult.bot;
             this.isKnownBot = cachedParseResult.isKnownBot;
             this.os = cachedParseResult.os;
@@ -55,7 +52,6 @@ UserAgent.prototype.parse = function () {
             }
 
             cUACache.put(this.source, this);
-            Logger.log('UserAgent calculated and cached.', 'debug', 'UserAgent~parse');
         }
     }
 };
@@ -80,6 +76,7 @@ UserAgent.prototype.determineBrowser = function () {
  * will not trigger a request limit.
  */
 UserAgent.prototype.determineBotData = function () {
+    var userAgentParser = require('../../scripts/util/regexParser').userAgentParser;
     var bots = require('./regex/bots.json');
     var sSource = this.source;
     var resultBot;
@@ -116,6 +113,7 @@ UserAgent.prototype.determineBotData = function () {
  * is someone doing something they shouldn't be doing.
  */
 UserAgent.prototype.determineLibraryData = function () {
+    var userAgentParser = require('../../scripts/util/regexParser').userAgentParser;
     var libraries = require('./regex/libraries.json');
     var variableReplacement = require('../../scripts/util/variableReplacement');
     var formatVersion = require('../../scripts/util/version').formatVersion;

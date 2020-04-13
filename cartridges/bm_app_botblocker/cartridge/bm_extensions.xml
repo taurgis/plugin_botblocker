@@ -39,4 +39,25 @@
 		</parameters>
 		<icon>icons/star_big.gif</icon>
 	</menuaction>
+
+	<menuaction id="botblocker_blacklist" menupath="botblocker"
+		position="100" site="false">
+		<name xml:lang="x-default">Blacklist</name>
+		<short_description xml:lang="x-default">This page allows you to view blacklisted IP's.</short_description>
+		<description xml:lang="x-default">This page allows you to view blacklisted IP's.</description>
+		<!-- no icon specified -->
+		<exec pipeline="BB" node="StartBlacklist" />
+		<sub-pipelines>
+			<pipeline name="BB-StartBlacklist" />
+			<pipeline name="BB-Detail" />
+            <pipeline name="BBServices-IPInformation" />
+            <pipeline name="BBServices-BlackListIP" />
+            <pipeline name="BBServices-WhiteListIP" />
+		</sub-pipelines>
+		<parameters>
+			<parameter name="menuname" value="IP Monitor" />
+			<parameter name="mainmenuname" value="Bot Blocker" />
+		</parameters>
+		<icon>icons/star_big.gif</icon>
+	</menuaction>
 </extensions>

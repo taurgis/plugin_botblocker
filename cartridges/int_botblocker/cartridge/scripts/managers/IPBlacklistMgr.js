@@ -86,8 +86,26 @@ function whitelist(oIPAddress, oUserAgent) {
     return true;
 }
 
+/**
+ * Gets
+ * @param {Integer} iStatus - The start date
+ *
+ * @returns {Iterable<Object>} - The items between the start and end date
+ */
+function getAll(iStatus) {
+    var result = CustomObjectMgr.queryCustomObjects('BotBlocker_Blacklisted', 'custom.status = {0}', 'lastModified desc', iStatus);
+
+
+    if (result && result.count > 0) {
+        return result;
+    }
+
+    return null;
+}
+
 module.exports = {
     getIPAddress: getIPAddress,
     saveIPAddress: saveIPAddress,
-    whitelist: whitelist
+    whitelist: whitelist,
+    getAll: getAll
 };

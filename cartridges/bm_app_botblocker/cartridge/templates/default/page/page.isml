@@ -14,7 +14,7 @@
         <div class="container-fluid">
             <header class="row">
                 <div class="col-3">
-                    <a href="${URLUtils.url('BB-Start')}">
+                    <a href="${pdict.home}">
                         <img class="p-4" height="90" src="${URLUtils.staticURL('/icons/forward.png')}" />
                     </a>
                 </div>

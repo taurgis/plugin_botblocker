@@ -14,15 +14,16 @@
                         <th scope="col" data-width="15" data-width-unit="%" data-sortable="true">IP</th>
                         <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Total pages (session)</th>
                         <th scope="col" data-width="10" data-width-unit="%" data-sortable="true">Seconds for count</th>
-                        <th scope="col" data-sortable="true">First pageview</th>
+                        <th scope="col" data-sortable="true">Blacklisted</th>
                         <th scope="col" data-sortable="true">Last pageview</th>
+                        <th scope="col" data-sortable="true">Times blocked</th>
                         </tr>
                     </thead>
                     <tbody>
                         <isloop iterator="${pdict.IPItems}" alias="IPItem">
                             <tr>
                                 <th scope="row">
-                                    <a href="${URLUtils.url('BB-Detail', 'ip', IPItem.custom.IP, 'source', 'ip')}">${IPItem.custom.IP}</a>
+                                    <a href="${URLUtils.url('BB-Detail', 'ip', IPItem.custom.IP, 'source', 'blacklist')}">${IPItem.custom.IP}</a>
                                 </th>
                                 <td>
                                     <isprint value="${IPItem.custom.count}" style="INTEGER"/>
@@ -37,6 +38,9 @@
                                 <td >
                                     <isprint value="${IPItem.lastModified}" style="DATE_SHORT" timezone="SITE" />
                                     <isprint value="${IPItem.lastModified}" style="DATE_TIME" timezone="SITE" />
+                                </td>
+                                <td >
+                                    <isprint value="${IPItem.custom.blockedCount}" style="INTEGER"/>
                                 </td>
                             </tr>
                         </isloop>
