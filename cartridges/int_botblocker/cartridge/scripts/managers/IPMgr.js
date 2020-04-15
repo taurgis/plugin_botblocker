@@ -43,8 +43,12 @@ function saveIPAddress(oIPAddress, oUserAgent) {
 
             var pageHistory = oBotBlockerIP.custom.pageHistory.slice(0);
 
-            if (pageHistory.length >= 200) {
+            if (pageHistory.length >= 25) {
                 pageHistory.shift();
+            }
+
+            if (pageHistory.length > 100) {
+                pageHistory = [];
             }
 
             pageHistory.push(oIPAddress.page);

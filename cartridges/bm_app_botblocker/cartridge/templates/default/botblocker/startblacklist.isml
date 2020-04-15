@@ -40,7 +40,7 @@
                                     <isprint value="${IPItem.lastModified}" style="DATE_TIME" timezone="SITE" />
                                 </td>
                                 <td >
-                                    <isprint value="${IPItem.custom.blockedCount}" style="INTEGER"/>
+                                    <isprint value="${IPItem.custom.blockedCount || 0}" style="INTEGER"/>
                                 </td>
                             </tr>
                         </isloop>
