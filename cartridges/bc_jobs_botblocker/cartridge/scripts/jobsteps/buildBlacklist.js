@@ -15,7 +15,6 @@ var run = function () {
         blackListIPs = require('../blacklists/blacklist-3.json');
     }
 
-
     blackListIPs.forEach(function (ip) {
         cBlackListCache.put(ip, true);
     });

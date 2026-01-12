@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (template, variables) {
-    var regex = new RegExp('\\$\\d', 'g');
+    var regex = /\$\d/g;
 
     if (template === null) return '';
 

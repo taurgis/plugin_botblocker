@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Fetches more information about the IP
  */
@@ -15,7 +17,7 @@ module.exports = {
         $(document).on('click', '.js-blacklist, .js-whitelist', (event) => {
             var $button = $(event.target);
             $.post($button.data('actionurl'), () => {
-                location.reload(true);
+                window.location.reload(true);
             });
         });
     },

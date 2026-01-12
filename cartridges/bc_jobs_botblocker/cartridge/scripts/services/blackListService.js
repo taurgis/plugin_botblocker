@@ -32,7 +32,6 @@ function createBlacklistService(numberOfBlacklists) {
     });
 }
 
-
 module.exports = {
     createVerificationService: createBlacklistService
 };

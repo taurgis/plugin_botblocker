@@ -4,6 +4,8 @@
 /* eslint-disable no-underscore-dangle */
 /* jshint strict: false */
 
+'use strict';
+
 /**
 * Special Note:  We are inserting the above jshint exception because of the argument.callee reference on line 105.
 *  Once a suitable alternative is implemented, we should be able to remove this exception.
@@ -96,7 +98,6 @@ function Class() {
             // Check if we're overwriting an existing function
             prototype[name] = typeof prop[name] === 'function' && typeof _super[name] === 'function' && fnTest.test(prop[name]) ? callback(name, prop[name]) : prop[name];
         });
-
 
         /**
          * Dummy constructor

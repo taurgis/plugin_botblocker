@@ -16,7 +16,6 @@ CacheStore.prototype.get = function (key) {
     return this[key];
 };
 
-
 module.exports = {
     getCache: function (cacheID) {
         if (!cache[cacheID]) {

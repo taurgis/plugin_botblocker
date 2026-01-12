@@ -32,7 +32,6 @@ function createInformationService(sIPAddress) {
     });
 }
 
-
 module.exports = {
     createInformationService: createInformationService
 };

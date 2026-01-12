@@ -96,7 +96,6 @@ UserAgent.prototype.determineBotData = function () {
             }
         };
 
-
         return true;
     });
 
@@ -138,7 +137,6 @@ UserAgent.prototype.determineLibraryData = function () {
 
         return true;
     });
-
 
     if (result.name) {
         this.library = result;

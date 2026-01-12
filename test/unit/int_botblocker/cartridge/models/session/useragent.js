@@ -34,7 +34,6 @@ describe('useragent', function () {
         assert.equal(result.isKnownLibrary, false);
     });
 
-
     it('should parse a browser correctly. - Chrome', function () {
         var sUserAgentString = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36';
         var result = new UserAgentModel(sUserAgentString);
@@ -48,7 +47,6 @@ describe('useragent', function () {
         assert.equal(result.browser.version, '80.0.3987.149');
         assert.equal(result.browser.engine, 'WebKit');
     });
-
 
     it('should parse a browser correctly. - Opera (Android)', function () {
         var sUserAgentString = 'Opera/9.80 (Android 2.2.1; Linux; Opera Tablet/ADR-1301080958) Presto/2.11.355 Version/12.10';
@@ -291,7 +289,6 @@ describe('useragent', function () {
         assert.equal(result.os.name, 'Mac');
     });
 
-
     it('should parse a library correctly. - Wget', function () {
         var sUserAgentString = 'Wget/1.19.1 (cygwin)';
         var result = new UserAgentModel(sUserAgentString);
@@ -304,4 +301,3 @@ describe('useragent', function () {
         assert.equal(result.library.name, 'Wget');
     });
 });
-

@@ -8,16 +8,14 @@
  * @returns {string} - The trimmed string
  */
 function trim(str, char) {
-    return str.replace(new RegExp(
-        '^[' + char + ']+|[' + char + ']+$', 'g'
-    ), '');
+    return str.replace(new RegExp('^[' + char + ']+|[' + char + ']+$', 'g'), '');
 }
 
 module.exports = {
     formatVersion: function (version, versionTruncation) {
         if (version === undefined) return '';
 
-        var versionString = trim(version, '. ').replace(new RegExp('_', 'g'), '.');
+        var versionString = trim(version, '. ').replace(/_/g, '.');
         var versionParts = versionString.split('.');
 
         // Return if the string is not only digits once we removed the dots

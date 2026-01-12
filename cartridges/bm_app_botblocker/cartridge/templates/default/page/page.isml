@@ -7,15 +7,15 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="${URLUtils.staticURL('/css/global.css')}">
         <title>
-            Forward - Bot Blocker
+            BotBlocker
         </title>
     </head>
     <body class="debug">
         <div class="container-fluid">
             <header class="row">
-                <div class="col-3">
-                    <a href="${pdict.home}">
-                        <img class="p-4" height="90" src="${URLUtils.staticURL('/icons/forward.png')}" />
+                <div class="col-3 d-flex align-items-center">
+                    <a class="h4 mb-0 text-light" href="${pdict.home}">
+                        BotBlocker
                     </a>
                 </div>
                 <div class="col-9">

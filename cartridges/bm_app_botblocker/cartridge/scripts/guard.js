@@ -82,7 +82,6 @@ var Filters = {
     }
 };
 
-
 /**
  * Exposes the given action to be accessible from the web. The action gets a property which marks it as exposed. This
  * property is checked by the platform.
@@ -144,7 +143,6 @@ function ensure(filters, action, params) {
         return error(params);
     });
 }
-
 
 /*
  * Module exports

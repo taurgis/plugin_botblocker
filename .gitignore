@@ -1,5 +1,7 @@
 cartridges/bm_app_botblocker/cartridge/static/default/css/
-cartridges/bm_app_botblocker/cartridge/static/default/js/
+cartridges/plugin_botblocker/cartridge/static/default/js/
+cartridges/plugin_botblocker/cartridge/static/default/fonts/
+cartridges/app_storefront_base
 node_modules
 dw.json
 

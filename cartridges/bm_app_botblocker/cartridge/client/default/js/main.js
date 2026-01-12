@@ -1,4 +1,8 @@
-window.jQuery = window.$ = require('jquery');
+'use strict';
+
+var $ = require('jquery');
+window.jQuery = $;
+window.$ = $;
 // var processInclude = require('./util');
 
 $(document).ready(function () {

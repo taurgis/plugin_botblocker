@@ -36,7 +36,6 @@ exports.extend = function (target, source) {
     return adaptedTarget;
 };
 
-
 /**
  * Access given properties of an object recursively
  *

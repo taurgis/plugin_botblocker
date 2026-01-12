@@ -1,7 +1,7 @@
 {
     "step-types": {
         "script-module-step": [{
-                "@type-id": "custom.forward.botblocker.BuildBlacklistCache",
+                "@type-id": "custom.botblocker.BuildBlacklistCache",
                 "module": "bc_jobs_botblocker/cartridge/scripts/jobsteps/buildBlacklist.js",
                 "description": "Builds up the blacklist cache from known lists.",
                 "function": "Run",

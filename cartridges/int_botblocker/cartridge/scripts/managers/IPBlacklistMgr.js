@@ -96,7 +96,6 @@ function whitelist(oIPAddress, oUserAgent) {
 function getAll(iStatus) {
     var result = CustomObjectMgr.queryCustomObjects('BotBlocker_Blacklisted', 'custom.status = {0}', 'lastModified desc', iStatus);
 
-
     if (result && result.count > 0) {
         return result;
     }
