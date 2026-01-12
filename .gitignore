@@ -4,4 +4,5 @@ cartridges/plugin_botblocker/cartridge/static/default/fonts/
 cartridges/app_storefront_base
 node_modules
 dw.json
+coverage/
 
