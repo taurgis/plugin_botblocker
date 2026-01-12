@@ -1,0 +1,14 @@
+<iscache type="relative" hour="24" />
+<div class="col-2">
+    <p>
+        <b>Continent:</b> ${pdict.information.continent_name} <br/>
+        <b>Country:</b> ${pdict.information.country_name} <br/>
+        <b>City:</b> ${pdict.information.city} <br/>
+        <b>Location:</b> ${pdict.information.latitude}, ${pdict.information.longitude}
+    </p>
+</div>
+<div class="col-3">
+    <img src="//maps.googleapis.com/maps/api/staticmap?center=${pdict.information.latitude},${pdict.information.longitude}&zoom=14&size=400x200&key=YOUR_API_KEY">
+</div>
+
+
