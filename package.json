@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:xploregroup/plugin_botblocker.git"
+    "url": "git@github.com:taurgis/plugin_botblocker.git"
   },
   "author": "Thomas Theunen",
    "devDependencies": {
